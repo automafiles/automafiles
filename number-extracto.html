@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Number Extractor</title>
+</head>
+<body>
+
+<input type="text" id="textInput" placeholder="Enter text here">
+<button onclick="extractNumbers()">Extract Numbers</button>
+
+<p>Extracted Numbers: <span id="result"></span></p>
+
+<script>
+    function extractNumbers() {
+        const inputText = document.getElementById('textInput').value;
+        const numbers = inputText.match(/(\d+,?)+/g);
+        
+        if (numbers) {
+            document.getElementById('result').innerText = numbers.join('');
+        } else {
+            document.getElementById('result').innerText = 'No numbers found!';
+        }
+    }
+</script>
+
+</body>
+</html>

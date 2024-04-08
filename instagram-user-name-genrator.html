@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Password Generator</title>
+    <script>
+        function generatePassword() {
+            var length = 14,
+                charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+                password = "";
+            
+            for (var i = 0; i < length; i++) {
+                var charIndex = Math.floor(Math.random() * charset.length);
+                password += charset.charAt(charIndex);
+            }
+            
+            var atIndex = Math.floor(Math.random() * (length - 1)) + 1; // Random index between 1 and length-1
+            var poundIndex = Math.floor(Math.random() * (length - 1)) + 1; // Random index between 1 and length-1
+            
+            password = password.substring(0, atIndex) + 'g' + password.substring(atIndex);
+            password = password.substring(0, poundIndex) + '3' + password.substring(poundIndex);
+            
+            document.getElementById("passwordOutput").innerHTML = password;
+        }
+    </script>
+</head>
+<body>
+    <h1>Random Password Generator</h1>
+    <button onclick="generatePassword()">Generate Password</button>
+    <br><br>
+    
+    <p id="passwordOutput"></p>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random URL Generator</title>
+    <script>
+        let urls = [
+            { number: 1, url: "https://drive.google.com/uc?export=download&id=18HCB6a4eEl8IT7v6SlvOot4Iwzl-Nh7M" },
+            { number: 2, url: "https://drive.google.com/uc?export=download&id=1m5_dtPHAOIDrAXvuUTsqtZiv6pFklXEs" },
+            { number: 3, url: "https://drive.google.com/uc?export=download&id=1JfxgiVC5QYp-3fARE6DaqJlYk3gcmxoK" },
+            { number: 4, url: "https://drive.google.com/uc?export=download&id=1dlhmZ-8P2ruCxtmQAr7pa7-WDYWGXhD2" }
+        ];
+
+        function generateRandomUrl() {
+            let urlNumbers = document.getElementById("urlNumbers").value.split(',');
+            let availableUrls = urls.filter(urlObj => !urlNumbers.includes(String(urlObj.number)));
+
+            if (availableUrls.length === 0) {
+                document.getElementById("result").innerHTML = "All URLs are excluded.";
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * availableUrls.length);
+            const randomUrlObj = availableUrls[randomIndex];
+
+            let excludedNumbers = urlNumbers.join(',');
+            document.getElementById("excludedNumbers").innerHTML = ` ${excludedNumbers}`;
+
+            document.getElementById("result").innerHTML = ` <a href="${randomUrlObj.url}" target="_blank">${randomUrlObj.url}</a><br> ${randomUrlObj.number}`;
+            document.getElementById("result1").innerHTML = ` <a href="${randomUrlObj.urlkjsl}" target="_blank">${randomUrlObj.urkl}</a><br> ${randomUrlObj.number}`;
+        }
+    </script>
+</head>
+<body>
+    <h1>Random URL Generator</h1>
+    <p>Enter the numbers of the URLs you want to exclude (separated by commas):</p>
+    <input type="text" id="urlNumbers" placeholder="e.g., 1,2">
+    <button onclick="generateRandomUrl()">Generate</button>
+    <h4 id="excludedNumbers"></h4>
+    <h4 id="result"></h4>
+    <h4 id="result1"></h4>
+
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Input Example</title>
+</head>
+<body>
+
+    <input type="text" id="text1" placeholder="Enter text 1">
+    <input type="text" id="text2" placeholder="Enter text 2">
+    <button onclick="printText()">Print Text</button>
+    <h1 id="output"></h1>
+
+    <script>
+        function printText() {
+            let text1 = document.getElementById('text1').value;
+            let text2 = document.getElementById('text2').value;
+            
+            let outputText = text1 + "," + text2;
+            
+            document.getElementById('output').innerText = outputText;
+        }
+    </script>
+
+</body>
+</html>
