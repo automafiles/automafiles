@@ -3,34 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Replace Tool</title>
+    <title>Find and Replace Words</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .button-group {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Text Replace Tool</h1>
-    <label for="inputText">Input Text:</label><br>
-    <textarea id="inputText" rows="4" cols="50"></textarea><br><br>
 
-    <label for="findWord">Find Word:</label><br>
-    <input type="text" id="findWord"><br><br>
+<h1>Text Find and Replace</h1>
 
-    <label for="replaceWord">Replace With:</label><br>
-    <input type="text" id="replaceWord"><br><br>
+<div class="input-group">
+    <label for="inputText">Input Text:</label>
+    <textarea id="inputText" rows="5"></textarea>
+</div>
 
-    <button onclick="replaceText()">Replace</button>
+<div class="input-group">
+    <label for="findWord">Find Word(s) (separated by 45025):</label>
+    <input type="text" id="findWord">
+</div>
 
-    <h2>Modified Text:</h2>
-    <p id="outputText"></p>
+<div class="input-group">
+    <label for="replaceWord">Replace With Word(s) (separated by 45025):</label>
+    <input type="text" id="replaceWord">
+</div>
 
-    <script>
-        function replaceText() {
-            var inputText = document.getElementById('inputText').value;
-            var findWord = document.getElementById('findWord').value;
-            var replaceWord = document.getElementById('replaceWord').value;
-            
-            var modifiedText = inputText.replace(new RegExp(findWord, 'g'), replaceWord);
-            
-            document.getElementById('outputText').innerText = modifiedText;
+<div class="button-group">
+    <button onclick="findAndReplace()">Find and Replace</button>
+</div>
+
+<div class="input-group">
+    <label for="outputText">Output Text:</label>
+    <textarea id="outputText" rows="5" readonly></textarea>
+</div>
+
+<script>
+    function findAndReplace() {
+        let inputText = document.getElementById('inputText').value;
+        let findWords = document.getElementById('findWord').value.split('45025');
+        let replaceWords = document.getElementById('replaceWord').value.split('45025');
+
+        if (findWords.length !== replaceWords.length) {
+            alert('Find and Replace words count must be the same.');
+            return;
         }
-    </script>
+
+        for (let i = 0; i < findWords.length; i++) {
+            let findWord = findWords[i].trim();
+            let replaceWord = replaceWords[i].trim();
+            let regex = new RegExp(findWord, 'g');
+            inputText = inputText.replace(regex, replaceWord);
+        }
+
+        document.getElementById('outputText').value = inputText;
+    }
+</script>
+
 </body>
 </html>
