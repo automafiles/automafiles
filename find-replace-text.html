@@ -78,3 +78,30 @@
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Brackets Tool</title>
+</head>
+<body>
+    <h1>Remove Brackets Tool</h1>
+    <label for="inputText">Input Text:</label><br>
+    <input type="text" id="input4Text"><br><br>
+
+    <button onclick="removeBrackets()">Submit</button>
+
+    <h2>Output:</h2>
+    <p id="output4Text"></p>
+
+    <script>
+        function removeBrackets() {
+            var inputText = document.getElementById('input4Text').value;
+            var modifiedText = inputText.replace(/\[\s*"(.*?)"\s*\]/g, '$1');
+            document.getElementById('output4Text').innerText = modifiedText;
+        }
+    </script>
+</body>
+</html>
+
