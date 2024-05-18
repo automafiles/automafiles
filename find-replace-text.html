@@ -36,12 +36,12 @@
 </div>
 
 <div class="input-group">
-    <label for="findWord">Find Word(s) (separated by 45025):</label>
+    <label for="findWord">Find Word(s) (separated by A):</label>
     <input type="text" id="findWord">
 </div>
 
 <div class="input-group">
-    <label for="replaceWord">Replace With Word(s) (separated by 45025):</label>
+    <label for="replaceWord">Replace With Word(s) (separated by A):</label>
     <input type="text" id="replaceWord">
 </div>
 
@@ -57,8 +57,8 @@
 <script>
     function findAndReplace() {
         let inputText = document.getElementById('inputText').value;
-        let findWords = document.getElementById('findWord').value.split('45025');
-        let replaceWords = document.getElementById('replaceWord').value.split('45025');
+        let findWords = document.getElementById('findWord').value.split('A');
+        let replaceWords = document.getElementById('replaceWord').value.split('A');
 
         if (findWords.length !== replaceWords.length) {
             alert('Find and Replace words count must be the same.');
