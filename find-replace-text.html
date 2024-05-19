@@ -232,9 +232,9 @@
 </head>
 <body>
     <h1>Date Converter</h1>
-    <input type="text" id="dateInput" placeholder="dd/mm/yyyy">
+    <input type="text" id="date14Input" placeholder="dd/mm/yyyy">
     <button onclick="convertDate()">Convert</button>
-    <div id="result"></div>
+    <div id="re14sult"></div>
 
     <script>
         function convertDate() {
@@ -266,7 +266,7 @@
                               
             const yearText = convertNumberToWords(year);
             const result = `${dayNames[day]}-${monthName}-${yearText}`;
-            document.getElementById('result').textContent = result;
+            document.getElementById('re14sult').textContent = result;
         }
 
         function convertNumberToWords(number) {
