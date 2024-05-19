@@ -162,3 +162,48 @@
 
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random DOB Generator</title>
+    <script>
+        function getRandomDate(dob) {
+            const [day, month, year] = dob.split('/').map(Number);
+            const dobDate = new Date(year, month - 1, day);
+            
+            // Minimum 1 month back
+            const minDate = new Date(dobDate);
+            minDate.setMonth(minDate.getMonth() - 3);
+
+            // Maximum 3 months back
+            const maxDate = new Date(dobDate);
+            maxDate.setMonth(maxDate.getMonth() - 1);
+
+            // Generate a random date between minDate and maxDate
+            const randomTime = minDate.getTime() + Math.random() * (maxDate.getTime() - minDate.getTime());
+            const randomDate = new Date(randomTime);
+
+            // Format the date back to DD/MM/YYYY
+            const formattedDate = `${String(randomDate.getDate()).padStart(2, '0')}/${String(randomDate.getMonth() + 1).padStart(2, '0')}/${randomDate.getFullYear()}`;
+            return formattedDate;
+        }
+
+        function generateRandomDOB() {
+            const dob = document.getElementById('dob').value;
+            const randomDob = getRandomDate(dob);
+            document.getElementById('result').innerText = `Random Date of Birth: ${randomDob}`;
+        }
+    </script>
+</head>
+<body>
+    <h1>Random Date of Birth Generator</h1>
+    <label for="dob">Enter Date of Birth (DD/MM/YYYY):</label>
+    <input type="text" id="dob" placeholder="20/07/2007">
+    <button onclick="generateRandomDOB()">Generate Random DOB</button>
+    <p id="result"></p>
+</body>
+</html>
+
