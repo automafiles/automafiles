@@ -124,4 +124,40 @@
 </body>
 </html>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name Picker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+    </style>
+</head>
+<body>
 
+    <h2>Random Name Picker</h2>
+
+    <label for="names">Enter Names:</label>
+    <input type="text" id="names" placeholder="Enter names separated by commas">
+    <br>
+    <button onclick="pickRandomName()">Pick a Random Name</button>
+    <br>
+    <h3 id="result"></h3>
+
+    <script>
+        function pickRandomName() {
+            var namesInput = document.getElementById('names').value;
+            var namesArray = namesInput.split(',');
+            var randomIndex = Math.floor(Math.random() * namesArray.length);
+            var randomName = namesArray[randomIndex].trim();
+            document.getElementById('result').innerText = randomName;
+        }
+    </script>
+
+</body>
+</html>
