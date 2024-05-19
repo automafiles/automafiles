@@ -207,3 +207,96 @@
 </body>
 </html>
 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Date Converter</h1>
+    <input type="text" id="dateInput" placeholder="dd/mm/yyyy">
+    <button onclick="convertDate()">Convert</button>
+    <div id="result"></div>
+
+    <script>
+        function convertDate() {
+            const dateInput = document.getElementById('dateInput').value;
+            const dateParts = dateInput.split('/');
+            
+            if (dateParts.length !== 3) {
+                alert('Please enter the date in dd/mm/yyyy format.');
+                return;
+            }
+
+            const day = parseInt(dateParts[0], 10);
+            const month = parseInt(dateParts[1], 10) - 1;  // JavaScript months are 0-based
+            const year = parseInt(dateParts[2], 10);
+
+            if (isNaN(day) || isNaN(month) || isNaN(year) || day < 1 || day > 31 || month < 0 || month > 11 || year < 1000 || year > 9999) {
+                alert('Please enter a valid date.');
+                return;
+            }
+
+            const date = new Date(year, month, day);
+            const monthName = date.toLocaleString('default', { month: 'long' }).toUpperCase();
+
+            const dayNames = ["ZERO", "FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH", "SIXTH", "SEVENTH", "EIGHTH", "NINTH", "TENTH", 
+                              "ELEVENTH", "TWELFTH", "THIRTEENTH", "FOURTEENTH", "FIFTEENTH", "SIXTEENTH", "SEVENTEENTH", 
+                              "EIGHTEENTH", "NINETEENTH", "TWENTIETH", "TWENTY-FIRST", "TWENTY-SECOND", "TWENTY-THIRD", 
+                              "TWENTY-FOURTH", "TWENTY-FIFTH", "TWENTY-SIXTH", "TWENTY-SEVENTH", "TWENTY-EIGHTH", "TWENTY-NINTH", 
+                              "THIRTIETH", "THIRTY-FIRST"];
+                              
+            const yearText = convertNumberToWords(year);
+            const result = `${dayNames[day]}-${monthName}-${yearText}`;
+            document.getElementById('result').textContent = result;
+        }
+
+        function convertNumberToWords(number) {
+            const ones = ["", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"];
+            const tens = ["", "", "TWENTY", "THIRTY", "FORTY", "FIFTY", "SIXTY", "SEVENTY", "EIGHTY", "NINETY"];
+            const teens = ["TEN", "ELEVEN", "TWELVE", "THIRTEEN", "FOURTEEN", "FIFTEEN", "SIXTEEN", "SEVENTEEN", "EIGHTEEN", "NINETEEN"];
+
+            let word = "";
+            let num = number;
+
+            if (num >= 1000) {
+                word += ones[Math.floor(num / 1000)] + " THOUSAND ";
+                num %= 1000;
+            }
+            if (num >= 100) {
+                word += ones[Math.floor(num / 100)] + " HUNDRED ";
+                num %= 100;
+            }
+            if (num >= 20) {
+                word += tens[Math.floor(num / 10)] + " ";
+                num %= 10;
+            } else if (num >= 10) {
+                word += teens[num - 10] + " ";
+                num = 0;
+            }
+            word += ones[num];
+            return word.trim();
+        }
+    </script>
+</body>
+</html>
+
+
