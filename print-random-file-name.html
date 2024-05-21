@@ -7,7 +7,7 @@
     <script>
         function generatePassword() {
             var length = 30,
-                charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()",
+                charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
                 password = "";
             
             for (var i = 0; i < length; i++) {
@@ -18,8 +18,8 @@
             var atIndex = Math.floor(Math.random() * (length - 1)) + 1; // Random index between 1 and length-1
             var poundIndex = Math.floor(Math.random() * (length - 1)) + 1; // Random index between 1 and length-1
             
-            password = password.substring(0, atIndex) + '@' + password.substring(atIndex);
-            password = password.substring(0, poundIndex) + '#' + password.substring(poundIndex);
+            //password = password.substring(0, atIndex) + '@' + password.substring(atIndex);
+            //password = password.substring(0, poundIndex) + '#' + password.substring(poundIndex);
             
             document.getElementById("passwordOutput").innerHTML = password;
         }
