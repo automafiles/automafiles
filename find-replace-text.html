@@ -24,6 +24,12 @@
         .button-group {
             margin-top: 10px;
         }
+        #outputContainer {
+            margin-top: 20px;
+        }
+        #outputText {
+            white-space: pre-wrap; /* to preserve new lines */
+        }
     </style>
 </head>
 <body>
@@ -49,9 +55,8 @@
     <button onclick="findAndReplace()">Find and Replace</button>
 </div>
 
-<div class="input-group">
-    <label for="outputText">Output Text:</label>
-    <textarea id="outputText" rows="5" readonly></textarea>
+<div id="outputContainer" class="input-group">
+    <h1 id="outputText"></h1>
 </div>
 
 <script>
@@ -72,12 +77,13 @@
             inputText = inputText.replace(regex, replaceWord);
         }
 
-        document.getElementById('outputText').value = inputText;
+        document.getElementById('outputText').innerText = inputText;
     }
 </script>
 
 </body>
 </html>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
