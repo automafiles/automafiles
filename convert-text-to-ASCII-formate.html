@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text to ASCII Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text to ASCII Converter</h1>
+        <textarea id="inputText" placeholder="Enter your text here..."></textarea>
+        <button onclick="convertToASCII()">Convert to ASCII</button>
+        <div class="result" id="result"></div>
+        <button onclick="convertToHTMLEntities()">Convert to HTML Entities</button>
+        <div class="result" id="htmlResult"></div>
+    </div>
+
+    <script>
+        function convertToASCII() {
+            const inputText = document.getElementById('inputText').value;
+            let asciiOutput = '';
+            for (let i = 0; i < inputText.length; i++) {
+                asciiOutput += inputText.charCodeAt(i) + ' ';
+            }
+            document.getElementById('result').innerText = asciiOutput.trim();
+        }
+
+        function convertToHTMLEntities() {
+            const asciiText = document.getElementById('result').innerText;
+            const asciiValues = asciiText.split(' ');
+            let htmlEntities = '';
+            for (let value of asciiValues) {
+                htmlEntities += `&#${value};`;
+            }
+            document.getElementById('htmlResult').innerText = htmlEntities;
+        }
+    </script>
+</body>
+</html>
