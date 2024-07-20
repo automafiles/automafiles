@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Formatter</title>
+    <script>
+        function formatNumber() {
+            var inputNumber = document.getElementById('numberInput').value;
+            if (inputNumber.length === 12 && !isNaN(inputNumber)) {
+                var formattedNumber = 'XXXX XXXX ' + inputNumber.slice(8, 12);
+                document.getElementById('formattedNumber').innerText = formattedNumber;
+            } else {
+                document.getElementById('formattedNumber').innerText = 'Invalid number';
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>12 Digit Number Formatter</h1>
+    <label for="numberInput">Enter a 12 digit number:</label>
+    <input type="text" id="numberInput" maxlength="12">
+    <button onclick="formatNumber()">Format Number</button>
+    <p id="formattedNumber"></p>
+</body>
+</html>
