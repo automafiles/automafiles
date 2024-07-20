@@ -24,3 +24,33 @@
     <p id="formattedNumber"></p>
 </body>
 </html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date and Time Formatter</title>
+    <script>
+        function printDateTime() {
+            var now = new Date();
+            var day = String(now.getDate()).padStart(2, '0');
+            var month = String(now.getMonth() + 1).padStart(2, '0'); // January is 0!
+            var year = now.getFullYear();
+            var hours = String(now.getHours()).padStart(2, '0');
+            var minutes = String(now.getMinutes()).padStart(2, '0');
+            var seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            var formattedDateTime = day + '-' + month + '-' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+            document.getElementById('dateTimeDisplay').innerText = formattedDateTime;
+        }
+    </script>
+</head>
+<body>
+    <h1>Print Current Date and Time</h1>
+    <button onclick="printDateTime()">Print Time</button>
+    <p id="dateTimeDisplay"></p>
+</body>
+</html>
+
