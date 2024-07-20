@@ -103,4 +103,59 @@
 </body>
 </html>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Processing</title>
+</head>
+<body>
+    <form id="textForm">
+        <label for="initialText">Enter initial text:</label><br>
+        <input type="text" id="initialText" name="initialText"><br><br>
+
+        <label for="finalText">Enter ending pattern ($-ashagdas-$@$$-jdshssjj-$$):</label><br>
+        <input type="text" id="finalText" name="finalText"><br><br>
+
+        <label for="gender">Select gender:</label><br>
+        <input type="radio" id="male" name="gender" value="male">
+        <label for="male">Male</label><br>
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Female</label><br><br>
+
+        <input type="button" value="Submit" onclick="processText()">
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        function processText() {
+            const initialText = document.getElementById('initialText').value;
+            const finalText = document.getElementById('finalText').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+
+            const pattern = /\$-(.*?)\$@\$\$-(.*?)-\$\$/;
+            const match = finalText.match(pattern);
+
+            if (match) {
+                const text1 = match[1];
+                const text2 = match[2];
+
+                let resultText = '';
+
+                if (gender === 'male') {
+                    resultText = `${initialText} ${text1}`;
+                } else if (gender === 'female') {
+                    resultText = `${initialText} ${text2}`;
+                }
+
+                document.getElementById('result').innerText = resultText;
+            } else {
+                document.getElementById('result').innerText = 'Invalid pattern!';
+            }
+        }
+    </script>
+</body>
+</html>
 
