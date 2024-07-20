@@ -80,3 +80,27 @@
 </body>
 </html>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random 12-Digit Number Generator</title>
+    <script>
+        function generateRandomNumber() {
+            var randomNumber = '';
+            for (var i = 0; i < 12; i++) {
+                randomNumber += Math.floor(Math.random() * 10); // 0 se 9 tak ka random digit add karta hai
+            }
+            document.getElementById('randomNumberDisplay').innerText = randomNumber;
+        }
+    </script>
+</head>
+<body>
+    <h1>Generate Random 12-Digit Number</h1>
+    <button onclick="generateRandomNumber()">Generate Number</button>
+    <p id="randomNumberDisplay"></p>
+</body>
+</html>
+
+
