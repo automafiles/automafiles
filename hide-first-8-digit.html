@@ -54,3 +54,29 @@
 </body>
 </html>
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Printer</title>
+    <script>
+        function printDate() {
+            var now = new Date();
+            var day = String(now.getDate()).padStart(2, '0');
+            var month = String(now.getMonth() + 1).padStart(2, '0'); // January is 0!
+            var year = now.getFullYear();
+            
+            var formattedDate = day + '-' + month + '-' + year;
+            document.getElementById('dateDisplay').innerText = formattedDate;
+        }
+    </script>
+</head>
+<body>
+    <h1>Print Current Date</h1>
+    <button onclick="printDate()">Print Date</button>
+    <p id="dateDisplay"></p>
+</body>
+</html>
+
