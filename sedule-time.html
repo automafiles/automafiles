@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Delay Message</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            margin-right: 10px;
+        }
+        .input-group input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Time Delay Message</h1>
+        <div class="input-group">
+            <label for="timeInput">Time:</label>
+            <input type="number" id="timeInput" value="1" min="1">
+            <select id="unitSelect">
+                <option value="minutes" selected>Minutes</option>
+                <option value="seconds">Seconds</option>
+                <option value="hours">Hours</option>
+            </select>
+        </div>
+        <button onclick="startTimer()">Start Timer</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        function startTimer() {
+            const timeInput = document.getElementById('timeInput').value;
+            const unit = document.getElementById('unitSelect').value;
+            let timeInMilliseconds;
+
+            switch (unit) {
+                case 'seconds':
+                    timeInMilliseconds = timeInput * 1000;
+                    break;
+                case 'minutes':
+                    timeInMilliseconds = timeInput * 60 * 1000;
+                    break;
+                case 'hours':
+                    timeInMilliseconds = timeInput * 60 * 60 * 1000;
+                    break;
+            }
+
+            document.getElementById('message').innerText = '';
+
+            setTimeout(() => {
+                document.getElementById('message').innerText = 'OK';
+            }, timeInMilliseconds);
+        }
+    </script>
+</body>
+</html>
