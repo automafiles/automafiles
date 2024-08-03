@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Time Delay Message</title>
+    <title>Time Delay with Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,11 +23,16 @@
         .input-group input {
             margin-right: 10px;
         }
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Time Delay Message</h1>
+        <h1>Time Delay with Timer</h1>
         <div class="input-group">
             <label for="timeInput">Time:</label>
             <input type="number" id="timeInput" value="1" min="1">
@@ -38,12 +43,13 @@
             </select>
         </div>
         <button onclick="startTimer()">Start Timer</button>
+        <div id="timerDisplay" class="timer"></div>
         <p id="message"></p>
     </div>
 
     <script>
         function startTimer() {
-            const timeInput = document.getElementById('timeInput').value;
+            const timeInput = parseInt(document.getElementById('timeInput').value);
             const unit = document.getElementById('unitSelect').value;
             let timeInMilliseconds;
 
@@ -59,12 +65,28 @@
                     break;
             }
 
-            document.getElementById('message').innerText = '';
+            const endTime = Date.now() + timeInMilliseconds;
+            const timerDisplay = document.getElementById('timerDisplay');
+            const message = document.getElementById('message');
 
-            setTimeout(() => {
-                document.getElementById('message').innerText = 'OK';
-            }, timeInMilliseconds);
+            function updateTimer() {
+                const remainingTime = endTime - Date.now();
+                if (remainingTime <= 0) {
+                    timerDisplay.innerText = 'Time is up!';
+                    message.innerText = 'OK';
+                    clearInterval(timerInterval);
+                } else {
+                    const minutes = Math.floor(remainingTime / (60 * 1000));
+                    const seconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
+                    const hours = Math.floor(minutes / 60);
+                    timerDisplay.innerText = `${String(hours).padStart(2, '0')}h ${String(minutes % 60).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
+                }
+            }
+
+            updateTimer(); // Initial call to display the time immediately
+            const timerInterval = setInterval(updateTimer, 1000);
         }
     </script>
 </body>
+
 </html>
