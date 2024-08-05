@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data Storage Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 400px;
+        }
+        button {
+            cursor: pointer;
+        }
+        .data-pair {
+            display: flex;
+            justify-content: space-between;
+        }
+        .data-pair input {
+            width: 48%;
+        }
+        #dataContainer {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Data Storage Example</h1>
+
+    <!-- Section to enter and save user details -->
+    <div id="userForm">
+        <input type="text" id="username" placeholder="Enter your username">
+        <button onclick="setUsername()">Set Username</button>
+    </div>
+    
+    <!-- Section to add data -->
+    <div id="dataSection" style="display: none;">
+        <div id="dataContainer"></div>
+        <button onclick="addDataFields()">Add Data</button>
+        <button onclick="saveData()">Save Data</button>
+    </div>
+
+    <!-- Section to retrieve and display user details -->
+    <div id="retrieveSection">
+        <input type="text" id="searchUsername" placeholder="Enter username to retrieve data">
+        <button onclick="retrieveData()">Retrieve Data</button>
+    </div>
+    
+    <div id="displayData"></div>
+
+    <script>
+        let currentUser = '';
+
+        // Set the current username and show the data section
+        function setUsername() {
+            currentUser = document.getElementById('username').value;
+            if (currentUser) {
+                document.getElementById('dataSection').style.display = 'block';
+                document.getElementById('userForm').style.display = 'none';
+            }
+        }
+
+        // Add new data fields for key-value pair input
+        function addDataFields() {
+            const dataContainer = document.getElementById('dataContainer');
+            const dataPair = document.createElement('div');
+            dataPair.className = 'data-pair';
+
+            const keyInput = document.createElement('input');
+            keyInput.placeholder = 'Key (e.g., Name)';
+
+            const valueInput = document.createElement('input');
+            valueInput.placeholder = 'Value (e.g., John Doe)';
+
+            dataPair.appendChild(keyInput);
+            dataPair.appendChild(valueInput);
+            dataContainer.appendChild(dataPair);
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            const dataContainer = document.getElementById('dataContainer');
+            const dataPairs = dataContainer.querySelectorAll('.data-pair');
+            let userData = {};
+
+            dataPairs.forEach(pair => {
+                const key = pair.children[0].value;
+                const value = pair.children[1].value;
+                if (key && value) {
+                    userData[key] = value;
+                }
+            });
+
+            if (currentUser) {
+                localStorage.setItem(currentUser, JSON.stringify(userData));
+                alert('Data saved successfully!');
+                resetForm();
+            }
+        }
+
+        // Reset the form after saving data
+        function resetForm() {
+            document.getElementById('dataContainer').innerHTML = '';
+            document.getElementById('username').value = '';
+            document.getElementById('dataSection').style.display = 'none';
+            document.getElementById('userForm').style.display = 'block';
+        }
+
+        // Retrieve and display data from localStorage
+        function retrieveData() {
+            const searchUsername = document.getElementById('searchUsername').value;
+            const displayData = document.getElementById('displayData');
+            displayData.innerHTML = '';
+
+            const userData = JSON.parse(localStorage.getItem(searchUsername));
+
+            if (userData) {
+                for (const [key, value] of Object.entries(userData)) {
+                    const dataPair = document.createElement('div');
+                    dataPair.className = 'data-pair';
+
+                    const keyElement = document.createElement('p');
+                    keyElement.textContent = key;
+
+                    const valueElement = document.createElement('p');
+                    valueElement.textContent = value;
+
+                    dataPair.appendChild(keyElement);
+                    dataPair.appendChild(valueElement);
+                    displayData.appendChild(dataPair);
+                }
+            } else {
+                displayData.textContent = 'No data found for this username.';
+            }
+        }
+    </script>
+</body>
+</html>
