@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Name Selector</title>
+    <script>
+        function getRandomName() {
+            const names = document.getElementById('names').value.split(',');
+            let randomName;
+            const userName = document.getElementById('userName').value.trim();
+            do {
+                randomName = names[Math.floor(Math.random() * names.length)].trim();
+            } while (randomName === userName && names.length > 1);
+            document.getElementById('randomName').innerText = ' ' + randomName;
+        }
+    </script>
+</head>
+<body>
+    <h1>Random Text Picker With Mach Check</h1>
+    <label for="names">Enter names (comma separated):</label>
+    <input type="text" id="names" placeholder="e.g., Sanoj, Manoj, Ramesh">
+    <br><br>
+    <label for="userName">Enter your name:</label>
+    <input type="text" id="userName" placeholder="e.g., Sanoj">
+    <br><br>
+    <button onclick="getRandomName()">Get Random Name</button>
+    <p id="randomName"></p>
+</body>
+</html>
