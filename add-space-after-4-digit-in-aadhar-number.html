@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Format 12-Digit Number</title>
+    <script>
+        function formatNumber() {
+            let input = document.getElementById("numberInput").value;
+            let formattedNumber = input.replace(/(\d{4})(?=\d)/g, '$1 ');
+            document.getElementById("formattedNumber").textContent = formattedNumber;
+        }
+    </script>
+</head>
+<body>
+    <h2>12-Digit Number Formatter</h2>
+    <input type="text" id="numberInput" maxlength="12" placeholder="Enter 12-digit number" oninput="formatNumber()">
+    <p>Formatted Number: <span id="formattedNumber"></span></p>
+</body>
+</html>
