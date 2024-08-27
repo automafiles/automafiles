@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save and Find Your Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .button {
+            margin-top: 10px;
+        }
+        #data-container {
+            margin-top: 20px;
+        }
+        #data-container .data-pair {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        #data-container .data-pair input {
+            width: 48%;
+            margin-right: 4%;
+        }
+        #data-container .data-pair input:last-child {
+            margin-right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Save and Find Your Data</h1>
+        
+        <div id="username-section" class="input-group">
+            <label for="username">Enter Username</label>
+            <input type="text" id="username" placeholder="Enter your username">
+        </div>
+
+        <div id="save-section">
+            <button id="add-data" class="button">Add Data</button>
+            <button id="save-data" class="button">Save Your Data</button>
+            <div id="data-container"></div>
+        </div>
+
+        <div id="find-section" style="margin-top: 20px;">
+            <button id="find-data" class="button">Find Your Data</button>
+        </div>
+    </div>
+
+    <script>
+        const dataContainer = document.getElementById('data-container');
+        const usernameInput = document.getElementById('username');
+        const saveButton = document.getElementById('save-data');
+        const addButton = document.getElementById('add-data');
+        const findButton = document.getElementById('find-data');
+
+        // Function to add new key-value input pair
+        function addDataPair(key = '', value = '') {
+            const pair = document.createElement('div');
+            pair.className = 'data-pair';
+            pair.innerHTML = `
+                <input type="text" placeholder="Key" value="${key}">
+                <input type="text" placeholder="Value" value="${value}">
+            `;
+            dataContainer.appendChild(pair);
+        }
+
+        // Add data pair button click
+        addButton.addEventListener('click', () => {
+            addDataPair();
+        });
+
+        // Save data button click
+        saveButton.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            if (!username) {
+                alert('Please enter a username');
+                return;
+            }
+
+            const dataPairs = document.querySelectorAll('.data-pair');
+            const data = {};
+            dataPairs.forEach(pair => {
+                const key = pair.children[0].value.trim();
+                const value = pair.children[1].value.trim();
+                if (key && value) {
+                    data[key] = value;
+                }
+            });
+
+            localStorage.setItem(username, JSON.stringify(data));
+            alert('Data saved successfully!');
+        });
+
+        // Find data button click
+        findButton.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            if (!username) {
+                alert('Please enter a username');
+                return;
+            }
+
+            const savedData = JSON.parse(localStorage.getItem(username));
+            if (savedData) {
+                dataContainer.innerHTML = ''; // Clear previous inputs
+                Object.entries(savedData).forEach(([key, value]) => {
+                    addDataPair(key, value);
+                });
+            } else {
+                alert('No data found for this username.');
+            }
+        });
+
+    </script>
+</body>
+</html>
