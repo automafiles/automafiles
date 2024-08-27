@@ -91,7 +91,7 @@
         saveButton.addEventListener('click', () => {
             const username = usernameInput.value.trim();
             if (!username) {
-                alert('Please enter a username');
+                //alert('Please enter a username');
                 return;
             }
 
@@ -106,14 +106,14 @@
             });
 
             localStorage.setItem(username, JSON.stringify(data));
-            alert('Data saved successfully!');
+            //alert('Data saved successfully!');
         });
 
         // Find data button click
         findButton.addEventListener('click', () => {
             const username = usernameInput.value.trim();
             if (!username) {
-                alert('Please enter a username');
+                //alert('Please enter a username');
                 return;
             }
 
@@ -124,7 +124,7 @@
                     addDataPair(key, value);
                 });
             } else {
-                alert('No data found for this username.');
+                //alert('No data found for this username.');
             }
         });
 
