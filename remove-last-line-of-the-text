@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Last Line</title>
+</head>
+<body>
+    <h2>Enter your text below:</h2>
+    <textarea id="userInput" rows="10" cols="30"></textarea><br><br>
+    <button onclick="removeLastLine()">Submit</button>
+    
+    <h2>Modified Text:</h2>
+    <p id="output"></p>
+
+    <script>
+        function removeLastLine() {
+            // Get the user input
+            var inputText = document.getElementById("userInput").value;
+
+            // Split the text into an array of lines
+            var lines = inputText.split('\n');
+
+            // Remove the last line
+            lines.pop();
+
+            // Join the remaining lines back into a single string
+            var modifiedText = lines.join('\n');
+
+            // Display the modified text
+            document.getElementById("output").innerText = modifiedText;
+        }
+    </script>
+</body>
+</html>
