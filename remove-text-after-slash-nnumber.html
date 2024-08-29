@@ -16,7 +16,7 @@
     <script>
         function processText() {
             let text = document.getElementById("userInput").value;
-            let regex = /\/n\d+.*/; // Match /n followed by one or more digits and any text after
+            let regex = /\\n\d+.*/; // Match /n followed by one or more digits and any text after
             let processedText = text.replace(regex, ""); // Remove matched text entirely
             document.getElementById("outputText").innerText = processedText;
         }
