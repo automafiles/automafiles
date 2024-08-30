@@ -12,9 +12,21 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
+            align-items: center;
         }
         .username {
             font-weight: bold;
+        }
+        .timer {
+            text-align: center;
+            width: 100px;
+        }
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
         }
         .timers {
             margin-top: 20px;
@@ -39,7 +51,7 @@
             let time = document.getElementById('time').value;
 
             if (username === "" || time === "") {
-                //alert("Please enter both username and time.");
+                alert("Please enter both username and time.");
                 return;
             }
 
@@ -54,8 +66,17 @@
             timerSpan.className = 'timer';
             timerSpan.innerText = time + ' seconds';
 
+            let deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-button';
+            deleteButton.innerText = 'Delete';
+            deleteButton.onclick = () => {
+                clearInterval(interval);
+                timerContainer.remove();
+            };
+
             timerContainer.appendChild(usernameSpan);
             timerContainer.appendChild(timerSpan);
+            timerContainer.appendChild(deleteButton);
 
             document.getElementById('timers').appendChild(timerContainer);
 
@@ -64,7 +85,6 @@
                 if (time <= 0) {
                     clearInterval(interval);
                     timerSpan.innerText = "Time's up!";
-                    // Yaha apni logic add kar sakte hain jab time khatam ho jaye.
                 } else {
                     timerSpan.innerText = time + ' seconds';
                 }
