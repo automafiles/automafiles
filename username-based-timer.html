@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Timers with Usernames</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .timer-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .username {
+            font-weight: bold;
+        }
+        .timers {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Set Timer for Multiple Users</h2>
+    
+    <div>
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="number" id="time" placeholder="Enter Time in Seconds">
+        <button onclick="addTimer()">Add Timer</button>
+    </div>
+
+    <div class="timers" id="timers"></div>
+
+    <script>
+        function addTimer() {
+            let username = document.getElementById('username').value;
+            let time = document.getElementById('time').value;
+
+            if (username === "" || time === "") {
+                alert("Please enter both username and time.");
+                return;
+            }
+
+            let timerContainer = document.createElement('div');
+            timerContainer.className = 'timer-container';
+
+            let usernameSpan = document.createElement('span');
+            usernameSpan.className = 'username';
+            usernameSpan.innerText = username;
+
+            let timerSpan = document.createElement('span');
+            timerSpan.className = 'timer';
+            timerSpan.innerText = time + ' seconds';
+
+            timerContainer.appendChild(usernameSpan);
+            timerContainer.appendChild(timerSpan);
+
+            document.getElementById('timers').appendChild(timerContainer);
+
+            let interval = setInterval(() => {
+                time--;
+                if (time <= 0) {
+                    clearInterval(interval);
+                    timerSpan.innerText = "Time's up!";
+                    // Yaha apni logic add kar sakte hain jab time khatam ho jaye.
+                } else {
+                    timerSpan.innerText = time + ' seconds';
+                }
+            }, 1000);
+        }
+    </script>
+
+</body>
+</html>
