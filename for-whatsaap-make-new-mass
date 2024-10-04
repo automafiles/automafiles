@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Key-Value Form</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .key-div, .value-div {
+            width: 45%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Dynamic Key-Value Input Form</h2>
+
+<form id="dynamicForm">
+    <div id="inputContainer">
+        <div class="input-group">
+            <input type="text" name="key" placeholder="Key" required>
+            <input type="text" name="value" placeholder="Value" required>
+        </div>
+    </div>
+    <button type="button" onclick="addInput()">Add More</button>
+    <button type="submit">Submit</button>
+</form>
+
+<div class="container">
+    <div class="key-div" id="keyDiv">
+        <h3></h3>
+    </div>
+    <div class="value-div" id="valueDiv">
+        <h3></h3>
+    </div>
+</div>
+
+<script>
+    function addInput() {
+        const container = document.getElementById('inputContainer');
+        const inputGroup = document.createElement('div');
+        inputGroup.classList.add('input-group');
+        inputGroup.innerHTML = `
+            <input type="text" name="key" placeholder="Key" required>
+            <input type="text" name="value" placeholder="Value" required>
+        `;
+        container.appendChild(inputGroup);
+    }
+
+    document.getElementById('dynamicForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        const keysDiv = document.getElementById('keyDiv');
+        const valuesDiv = document.getElementById('valueDiv');
+
+        // Clear previous results
+        keysDiv.innerHTML = '<h3>Keys</h3>';
+        valuesDiv.innerHTML = '<h3>Values</h3>';
+
+        // Get all input fields
+        const keyInputs = document.querySelectorAll('input[name="key"]');
+        const valueInputs = document.querySelectorAll('input[name="value"]');
+
+        // Loop through inputs and display in respective divs
+        keyInputs.forEach((keyInput, index) => {
+            const valueInput = valueInputs[index];
+
+            const keyParagraph = document.createElement('p');
+            keyParagraph.textContent = keyInput.value;
+            keysDiv.appendChild(keyParagraph);
+
+            const valueParagraph = document.createElement('p');
+            valueParagraph.textContent = valueInput.value;
+            valuesDiv.appendChild(valueParagraph);
+        });
+    });
+</script>
+
+</body>
+</html>
