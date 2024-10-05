@@ -24,8 +24,8 @@
 <form id="dynamicForm">
     <div id="inputContainer">
         <div class="input-group">
-            <input type="text" name="key" placeholder="Key" required>
-            <input type="text" name="value" placeholder="Value" required>
+            <input type="text" name="key" placeholder="Key" >
+            <input type="text" name="value" placeholder="Value" >
         </div>
     </div>
     <button type="button" onclick="addInput()">Add More</button>
@@ -47,8 +47,8 @@
         const inputGroup = document.createElement('div');
         inputGroup.classList.add('input-group');
         inputGroup.innerHTML = `
-            <input type="text" name="key" placeholder="Key" required>
-            <input type="text" name="value" placeholder="Value" required>
+            <input type="text" name="key" placeholder="Key" >
+            <input type="text" name="value" placeholder="Value" >
         `;
         container.appendChild(inputGroup);
     }
@@ -60,8 +60,8 @@
         const valuesDiv = document.getElementById('valueDiv');
 
         // Clear previous results
-        keysDiv.innerHTML = '<h3>Keys</h3>';
-        valuesDiv.innerHTML = '<h3>Values</h3>';
+        keysDiv.innerHTML = '<h3></h3>';
+        valuesDiv.innerHTML = '<h3></h3>';
 
         // Get all input fields
         const keyInputs = document.querySelectorAll('input[name="key"]');
