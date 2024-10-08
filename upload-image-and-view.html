@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+</head>
+<body>
+    <h1>Image Upload Example</h1>
+    <input type="file" id="fileInput" accept="image/*">
+    <br><br>
+    <img id="imageView" style="display:none; max-width: 300px;" alt="Uploaded Image">
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const imageView = document.getElementById('imageView');
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imageView.src = e.target.result;
+                    imageView.style.display = 'block'; // Image ko dikhane ka
+                }
+                reader.readAsDataURL(file); // File ko data URL mein convert karna
+            }
+        });
+    </script>
+</body>
+</html>
