@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Date Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .output {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Random Date Generator</h1>
+
+    <button onclick="generateRandomDate1()">Generate Date (5 to 8 days before)</button>
+    <button onclick="generateRandomDate2()">Generate Date (2 to 5 days before)</button>
+    <button onclick="generateCurrentDate()">Generate Current Date</button>
+
+    <div class="output" id="output"></div>
+
+    <script>
+        // Function to format date as dd-mm-yyyy
+        function formatDate(date) {
+            let day = String(date.getDate()).padStart(2, '0');
+            let month = String(date.getMonth() + 1).padStart(2, '0');
+            let year = date.getFullYear();
+            return day + '-' + month + '-' + year;
+        }
+
+        // Generate random date (5 to 8 days before current date)
+        function generateRandomDate1() {
+            let currentDate = new Date();
+            let randomOffset = Math.floor(Math.random() * 4) + 5;  // Random number between 5 and 8
+            currentDate.setDate(currentDate.getDate() - randomOffset);
+            document.getElementById('output').innerText = ' ' + formatDate(currentDate);
+        }
+
+        // Generate random date (2 to 5 days before current date)
+        function generateRandomDate2() {
+            let currentDate = new Date();
+            let randomOffset = Math.floor(Math.random() * 4) + 2;  // Random number between 2 and 5
+            currentDate.setDate(currentDate.getDate() - randomOffset);
+            document.getElementById('output').innerText = ' ' + formatDate(currentDate);
+        }
+
+        // Generate current date
+        function generateCurrentDate() {
+            let currentDate = new Date();
+            document.getElementById('output').innerText = ' ' + formatDate(currentDate);
+        }
+    </script>
+
+</body>
+</html>
