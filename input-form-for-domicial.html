@@ -30,7 +30,7 @@
             // Displaying image if available
             const file = document.getElementById('photo').files[0];
             if (file) {
-                output += `<div><strong>Uploaded Photo:</strong><br><img src='" + URL.createObjectURL(file) + "' style='max-width: 200px;'></div><br>`;
+                output += `<div><strong>Uploaded Photo:</strong><br><img src="${URL.createObjectURL(file)}" style="max-width: 200px;"></div><br>`;
             }
 
             // Displaying output data in separate divs
@@ -55,6 +55,10 @@
             <option value="पत्नी">पत्नी</option>
             <option value="पुत्र/पुत्री">पुत्र/पुत्री</option>
         </select><br><br>
+
+        <!-- Father's Name -->
+        <label for="father_name">Father or husband Name:</label>
+        <input type="text" id="father_name" name="father_name" required><br><br>
 
         <!-- Mata ka naam -->
         <label for="mata_name">Mata Ka Naam:</label>
