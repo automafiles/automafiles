@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Example with Photo Upload</title>
+    <script>
+        function showImagePreview(input) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+
+            // Getting form data
+            const formData = new FormData(event.target);
+            let output = "<h3>Submitted Data:</h3>";
+            formData.forEach((value, key) => {
+                output += `<strong>${key}:</strong> ${value || " "}<br>`;
+            });
+
+            // Displaying image if available
+            const file = document.getElementById('photo').files[0];
+            if (file) {
+                output += "<strong>Uploaded Photo:</strong><br><img src='" + URL.createObjectURL(file) + "' style='max-width: 200px;'><br>";
+            }
+
+            // Displaying output data
+            document.getElementById('output').innerHTML = output;
+        }
+    </script>
+</head>
+<body>
+    <h2>User Information Form</h2>
+    <form onsubmit="handleSubmit(event)">
+        <!-- Name in English -->
+        <label for="name_english">Name in English:</label>
+        <input type="text" id="name_english" name="name_english" required><br><br>
+
+        <!-- Name in Hindi -->
+        <label for="name_hindi">Name in Hindi:</label>
+        <input type="text" id="name_hindi" name="name_hindi" required><br><br>
+
+        <!-- Dropdown for Patni/Putr/Putri -->
+        <label for="relation">Select Relation:</label>
+        <select id="relation" name="relation" required>
+            <option value="patni">Patni</option>
+            <option value="putr_putri">Putr/Putri</option>
+        </select><br><br>
+
+        <!-- Mata ka naam -->
+        <label for="mata_name">Mata Ka Naam:</label>
+        <input type="text" id="mata_name" name="mata_name" required><br><br>
+
+        <!-- Makan Number (Optional) -->
+        <label for="makan_number">Makan Number:</label>
+        <input type="text" id="makan_number" name="makan_number"><br><br>
+
+        <!-- Mohalla (Optional) -->
+        <label for="mohalla">Mohalla:</label>
+        <input type="text" id="mohalla" name="mohalla"><br><br>
+
+        <!-- Gram (Optional) -->
+        <label for="gram">Gram:</label>
+        <input type="text" id="gram" name="gram"><br><br>
+
+        <!-- Thana -->
+        <label for="thana">Thana:</label>
+        <input type="text" id="thana" name="thana" required><br><br>
+
+        <!-- Tahsil -->
+        <label for="tahsil">Tahsil:</label>
+        <input type="text" id="tahsil" name="tahsil" required><br><br>
+
+        <!-- District -->
+        <label for="district">District:</label>
+        <input type="text" id="district" name="district" required><br><br>
+
+        <!-- Photo Upload -->
+        <label for="photo">Upload Photo:</label>
+        <input type="file" id="photo" name="photo" accept="image/*" onchange="showImagePreview(this)"><br><br>
+
+        <!-- Submit Button -->
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Output Section for Submitted Data -->
+    <div id="output"></div>
+
+    <!-- Image Preview -->
+    <img id="imagePreview" src="" alt="Image Preview" style="display: none; margin-top: 20px; max-width: 200px;">
+</body>
+</html>
