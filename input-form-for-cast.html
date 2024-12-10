@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Example with Photo Upload</title>
+    <script>
+        function showImagePreview(input) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+
+            // Getting form data
+            const formData = new FormData(event.target);
+            let output = "";
+
+            // Iterating over the form data and displaying in separate divs
+            formData.forEach((value, key) => {
+                output += `<div><strong>${key}:</strong> ${value || " "}</div><br>`;
+            });
+
+            // Displaying image if available
+            const file = document.getElementById('photo').files[0];
+            if (file) {
+                output += `<div><strong>Uploaded Photo:</strong><br><img src="${URL.createObjectURL(file)}" style="max-width: 200px;"></div><br>`;
+            }
+
+            // Displaying output data in separate divs
+            document.getElementById('output').innerHTML = output;
+        }
+
+        function updateSubCategory() {
+            const category = document.getElementById('category').value;
+            let subCategorySelect = document.getElementById('subCategory');
+            subCategorySelect.innerHTML = ""; // Reset previous options
+
+            if (category === 'पिछड़ी') {
+                const options = [
+                    "अर्कवंशीय", "अरख", "अर्राक", "अहीर", "इदरीसी", "कचेर", "कुजड़ा (राईन)",
+                    "कडेरे", "कतुआ", "कन्डेरे", "कम्बोज", "कुम्हार", "करण(कर्ण)", "कुर्मी", "कुर्मी-मल्ल",
+                    "कुर्मी-सैथवार", "कुरैशी", "कलवार", "कलार", "कलाल", "केवट/मल्लाह", "कश्यप", "कसगर", 
+                    "कसेरा", "कस्साव", "कसौधन", "कहार", "काकुस्थ", "काछी", "काछी-कुशवाहा", "कांदू", 
+                    "किसान", "कोइरी", "खुमरा", "खागी", "गूजर", "गड़ेरिया", "गद्दी", "गन्धी", "ग्वाला", 
+                    "गाड़ा", "गिरि", "गोले-ठाकुर", "गोसाई", "घोसी", "चक", "चनऊ", "चिकवा", "चौरसिया", 
+                    "छीपा", "छीपी", "जागिड़", "जाट", "जोगी", "जोरिया", "झोजा", "ठठेरा", "डफाली", "तंतवा", 
+                    "तमोली", "तेली", "तंवर", "ताम्रकार", "दर्जी", "देववंशी", "दांगी", "धाकड़", "धीमान", 
+                    "धीवर", "धोबी", "नक्काल", "नट", "नद्दाफ(धुनिया)", "नाई", "नानबाई", "नायक", "निषाद", 
+                    "नोनिया", "पटनवार", "पटेल", "पटवा", "पटेहरा", "पटहारा", "प्रजापति", "पांचाल", 
+                    "पाल और बघेल", "पीराही", "फकीर", "बंजारा", "बढ़ई", "बढ़ई-शैफी", "बरई", "बैरागी", 
+                    "बारी", "बिन्द", "बियार", "भूंज", "भठियारा", "भर", "भुर्जी (भड़भूजा)", "भिश्ती-अब्बासी", 
+                    "मुकेरानी", "मुकेरी", "मनिहार", "मुराव/मुराई", "मेव", "मेवाती", "मंसूरी", "मुस्लिम कायस्थ", 
+                    "मारछा", "माली", "माहीगीर", "मिरासी", "मीरशिकार", "मोची", "मोदनवाल", "मोमिन (अंसार)", 
+                    "मौर्य", "यदुवंशीय", "यादव", "रंकी", "रंगरेज", "रंगवा", "रमगढ़िया", "राजभर", "राय सिक्ख", 
+                    "रोगनगर", "रोड़", "रौनियार", "लखेरा", "लोट", "लोध", "लोधा", "लोधी", "लोधी राजपूत", 
+                    "लोनिया", "लोनिया-चौहान", "लोहार", "लोहार-सैफी", "विश्वकर्मा", "शेख सरवरी(पिराई)", 
+                    "श्रीवास", "शाक्य", "सक्का-भिश्ती", "संगतराश", "सुनार", "सैनी", "सलमानी", "स्वर्णकार", 
+                    "सविता", "स्वीपर", "सामानी", "साहू", "सिंघाड़िया", "सोनार", "हज्जाम", "हलवाई", "हलालखोर", 
+                    "हंसीरी"
+                ];
+                options.forEach(option => {
+                    const optionElem = document.createElement("option");
+                    optionElem.text = option;
+                    subCategorySelect.appendChild(optionElem);
+                });
+            } else if (category === 'अनुसूचित जाति') {
+                const options = [
+                    "अगरिया", "कंजड़", "कपड़िया", "कबडिया", "करवल", "कलाबाज", "कोरवा", "कोरी", "कोल", 
+                    "खटिक", "खरैता", "खरवार (बनवासी को छोड कर)", "खरोट", "ग्वाल", "घसिया", "चमार", "चेरो", 
+                    "जाटव", "झुसिया", "डोम", "डोमर", "तरमाली", "तुरैहा", "दबगर", "दुसाध", "धनगर", "धरकार", 
+                    "धरमी", "धुसिया", "धानुक", "धोबी", "नट", "पंखा", "पतरी", "पहरिया", "पासी", "बैगा", "बंगाली", 
+                    "बजनिया", "बेड़िया", "बधिक", "बनमानुष", "बरवार", "बलई", "बेलदार", "बलहर", "बैसवार", 
+                    "बसॊड़", "बहेलिया", "बाजगी", "बादी", "बाल्मीकि", "बावरिया", "बांसफोर", "बोरिया", "भुइया", 
+                    "भुइयार", "भंतू", "मजहबी", "मझवार", "मुसहर", "रावत", "लालबेगी", "शिल्पकार", "सनोरिया", 
+                    "सहरिया", "सांसिया", "हबुड़ा", "हरी", "हेला"
+                ];
+                options.forEach(option => {
+                    const optionElem = document.createElement("option");
+                    optionElem.text = option;
+                    subCategorySelect.appendChild(optionElem);
+                });
+            } else if (category === 'अनुसूचित जन जाति') {
+                const options = ["ओझा", "गोंड", "जौनसारी", "थारु", "धुरिया", "नायक", "पठारी", "बोक्सा", "भोटिया", "राजगोंड", "राजी"];
+                options.forEach(option => {
+                    const optionElem = document.createElement("option");
+                    optionElem.text = option;
+                    subCategorySelect.appendChild(optionElem);
+                });
+            } else if (category === 'विमुक्त') {
+                const options = ["केवट", "डोम", "पासी", "भंतू", "हबुरा"];
+                options.forEach(option => {
+                    const optionElem = document.createElement("option");
+                    optionElem.text = option;
+                    subCategorySelect.appendChild(optionElem);
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>User Information Form</h2>
+    <form onsubmit="handleSubmit(event)">
+        <!-- Name in English -->
+        <label for="name_english">Name in English:</label>
+        <input type="text" id="name_english" name="name_english" required><br><br>
+
+        <!-- Name in Hindi -->
+        <label for="name_hindi">Name in Hindi:</label>
+        <input type="text" id="name_hindi" name="name_hindi" required><br><br>
+
+        <!-- Dropdown for Patni/Putr/Putri -->
+        <label for="relation">Select Relation:</label>
+        <select id="relation" name="relation" required>
+            <option value="पत्नी">पत्नी</option>
+            <option value="पुत्र/पुत्री">पुत्र/पुत्री</option>
+        </select><br><br>
+
+        <!-- Father's Name -->
+        <label for="father_name">Father or husband Name:</label>
+        <input type="text" id="father_name" name="father_name" required><br><br>
+
+        <!-- Mata ka naam -->
+        <label for="mata_name">Mata Ka Naam:</label>
+        <input type="text" id="mata_name" name="mata_name" required><br><br>
+
+        <!-- Caste Category Dropdown -->
+        <label for="category">Category:</label>
+        <select id="category" name="category" onchange="updateSubCategory()" required>
+            <option value="पिछड़ी">पिछड़ी</option>
+            <option value="अनुसूचित जाति">अनुसूचित जाति</option>
+            <option value="अनुसूचित जन जाति">अनुसूचित जन जाति</option>
+            <option value="विमुक्त">विमुक्त</option>
+        </select><br><br>
+
+        <!-- Sub Category Dropdown -->
+        <label for="subCategory">Sub Category:</label>
+        <select id="subCategory" name="subCategory" required>
+            <!-- Options will be populated dynamically -->
+        </select><br><br>
+
+        <!-- Optional Fields -->
+        <label for="makan_number">Makan Number:</label>
+        <input type="text" id="makan_number" name="makan_number"><br><br>
+
+        <label for="mohalla">Mohalla:</label>
+        <input type="text" id="mohalla" name="mohalla"><br><br>
+
+        <label for="gram">Gram:</label>
+        <input type="text" id="gram" name="gram"><br><br>
+
+        <label for="thana">Thana:</label>
+        <input type="text" id="thana" name="thana" required><br><br>
+
+        <label for="tahsil">Tahsil:</label>
+        <input type="text" id="tahsil" name="tahsil" required><br><br>
+
+        <label for="district">District:</label>
+        <input type="text" id="district" name="district" required><br><br>
+
+        <label for="signed_by">Signed By:</label>
+        <input type="text" id="signed_by" name="signed_by" required><br><br>
+
+        <!-- Photo Upload -->
+        <label for="photo">Upload Photo:</label>
+        <input type="file" id="photo" name="photo" accept="image/*" onchange="showImagePreview(this)"><br><br>
+
+        <!-- Submit Button -->
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Output Section for Submitted Data -->
+    <div id="output"></div>
+
+    <!-- Image Preview -->
+    <img id="imagePreview" src="" alt="Image Preview" style="display: none; margin-top: 20px; max-width: 200px;">
+</body>
+</html>
