@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Example with Photo Upload</title>
@@ -37,32 +35,60 @@
             document.getElementById('output').innerHTML = output;
         }
     </script>
-</head>
+<style class="automa-element-selector">@font-face { font-family: "Inter var"; font-weight: 100 900; font-display: swap; font-style: normal; font-named-instance: "Regular"; src: url("chrome-extension://infppggnoaenmfagbfknfkancpbljcca/Inter-roman-latin.var.woff2") format("woff2") }
+.automa-element-selector { direction: ltr } 
+ [automa-isDragging] { user-select: none } 
+ [automa-el-list] {outline: 2px dashed #6366f1;}</style></head>
 <body>
     <h2>User Information Form</h2>
     <form onsubmit="handleSubmit(event)">
+
+        <!-- application number -->
+        <label for="Application_number">Application number:</label>
+        <input type="text" id="Application_number" name="Application_number" required><br><br>
+      
+        <!-- Certificate Number -->
+        <label for="certificate_number">Certificate number:</label>
+        <input type="text" id="Certificate_number" name="certificate_number" required><br><br>
+
+        <!-- Issue date -->
+        <label for="issue_date">Issue date:</label>
+        <input type="text" id="issue_date" name="issue_date" required><br><br>
+
+        <!-- Print date -->
+        <label for="print_date">Print date:</label>
+        <input type="text" id="print_date" name="print_date" required><br><br>
+
+        <!-- Apply date -->
+        <label for="apply_date">apply date:</label>
+        <input type="text" id="apply_date" name="apply_date" required><br><br>
+
+        <!-- Place -->
+        <label for="place">Place:</label>
+        <input type="text" id="place" name="place" required><br><br>
+
         <!-- Name in English -->
         <label for="name_english">Name in English:</label>
-        <input type="text" id="name_english" name="name_english" required><br><br>
+        <input type="text" id="name_english" name="name_english" required=""><br><br>
 
         <!-- Name in Hindi -->
         <label for="name_hindi">Name in Hindi:</label>
-        <input type="text" id="name_hindi" name="name_hindi" required><br><br>
+        <input type="text" id="name_hindi" name="name_hindi" required=""><br><br>
 
         <!-- Dropdown for Patni/Putr/Putri -->
         <label for="relation">Select Relation:</label>
-        <select id="relation" name="relation" required>
+        <select id="relation" name="relation" required="">
             <option value="पत्नी">पत्नी</option>
             <option value="पुत्र/पुत्री">पुत्र/पुत्री</option>
         </select><br><br>
 
         <!-- Father's Name -->
         <label for="father_name">Father or husband Name:</label>
-        <input type="text" id="father_name" name="father_name" required><br><br>
+        <input type="text" id="father_name" name="father_name" required=""><br><br>
 
         <!-- Mata ka naam -->
         <label for="mata_name">Mata Ka Naam:</label>
-        <input type="text" id="mata_name" name="mata_name" required><br><br>
+        <input type="text" id="mata_name" name="mata_name" required=""><br><br>
 
         <!-- Makan Number (Optional) -->
         <label for="makan_number">Makan Number:</label>
@@ -78,15 +104,22 @@
 
         <!-- Thana -->
         <label for="thana">Thana:</label>
-        <input type="text" id="thana" name="thana" required><br><br>
+        <input type="text" id="thana" name="thana" required=""><br><br>
 
         <!-- Tahsil -->
         <label for="tahsil">Tahsil:</label>
-        <input type="text" id="tahsil" name="tahsil" required><br><br>
+        <input type="text" id="tahsil" name="tahsil" required=""><br><br>
 
         <!-- District -->
         <label for="district">District:</label>
-        <input type="text" id="district" name="district" required><br><br>
+        <input type="text" id="district" name="district" required=""><br><br>
+
+        <label for="signed_by">Signed By:</label>
+        <input type="text" id="signed_by" name="signed_by" required><br><br>
+
+        <!-- New Field: Jari Karta -->
+        <label for="jari_karta">जारी कर्ता:</label>
+        <input type="text" id="jari_karta" name="jari_karta" required><br><br>
 
         <!-- Photo Upload -->
         <label for="photo">Upload Photo:</label>
@@ -101,5 +134,6 @@
 
     <!-- Image Preview -->
     <img id="imagePreview" src="" alt="Image Preview" style="display: none; margin-top: 20px; max-width: 200px;">
-</body>
-</html>
+
+
+<div id="automa-palette"></div></body></html>
