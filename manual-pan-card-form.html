@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Input Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        #output {
+            margin-top: 20px;
+        }
+        img {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>User Information Form</h1>
+<form id="userForm">
+    <div class="form-group">
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" required>
+    </div>
+    <div class="form-group">
+        <label for="dob">Date of Birth:</label>
+        <input type="text" id="dob" name="dob" placeholder="dd/mm/yyyy" required>
+    </div>
+    <div class="form-group">
+        <label for="fatherName">Father Name:</label>
+        <input type="text" id="fatherName" name="fatherName" required>
+    </div>
+    <div class="form-group">
+        <label for="panNumber">PAN Number:</label>
+        <input type="text" id="panNumber" name="panNumber" required>
+    </div>
+    <div class="form-group">
+        <label for="photo">Photo Upload:</label>
+        <input type="file" id="photo" name="photo" accept="image/*" required>
+    </div>
+    <div class="form-group">
+        <label for="signature">Signature Upload:</label>
+        <input type="file" id="signature" name="signature" accept="image/*" required>
+    </div>
+    <button type="button" onclick="handleSubmit()">Submit</button>
+</form>
+
+<div id="output"></div>
+
+<script>
+    function formatDateToDDMMYYYY(dateString) {
+        const [year, month, day] = dateString.split('-');
+        return `${day}/${month}/${year}`;
+    }
+
+    function handleSubmit() {
+        const fullName = document.getElementById('fullName').value;
+        const dobRaw = document.getElementById('dob').value;
+        const dob = dobRaw.includes('-') ? formatDateToDDMMYYYY(dobRaw) : dobRaw;
+        const fatherName = document.getElementById('fatherName').value;
+        const panNumber = document.getElementById('panNumber').value;
+        const photoFile = document.getElementById('photo').files[0];
+        const signatureFile = document.getElementById('signature').files[0];
+
+        const output = document.getElementById('output');
+        output.innerHTML = `
+            <p><strong>Full Name:</strong> ${fullName}</p>
+            <p><strong>Date of Birth:</strong> ${dob}</p>
+            <p><strong>Father Name:</strong> ${fatherName}</p>
+            <p><strong>PAN Number:</strong> ${panNumber}</p>
+        `;
+
+        if (photoFile) {
+            const photoURL = URL.createObjectURL(photoFile);
+            output.innerHTML += `<p><strong>Photo:</strong></p><img src="${photoURL}" alt="User Photo">`;
+        }
+
+        if (signatureFile) {
+            const signatureURL = URL.createObjectURL(signatureFile);
+            output.innerHTML += `<p><strong>Signature:</strong></p><img src="${signatureURL}" alt="User Signature">`;
+        }
+    }
+</script>
+
+</body>
+</html>
