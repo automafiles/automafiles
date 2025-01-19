@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Editor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 20px;
+            font-family: monospace;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        input[type="text"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>JSON Editor</h1>
+    <textarea id="jsonInput" placeholder="Paste your JSON here"></textarea>
+    <button id="loadJsonBtn">Load JSON</button>
+    <div id="editor"></div>
+    <button id="exportJsonBtn">Export JSON</button>
+
+    <script>
+        const loadJsonBtn = document.getElementById("loadJsonBtn");
+        const exportJsonBtn = document.getElementById("exportJsonBtn");
+        const jsonInput = document.getElementById("jsonInput");
+        const editor = document.getElementById("editor");
+
+        let jsonData = {};
+
+        // Function to render JSON as editable form
+        function renderJson(json, parentElement) {
+            parentElement.innerHTML = ""; // Clear existing content
+            const table = document.createElement("table");
+
+            for (const key in json) {
+                const row = document.createElement("tr");
+                const keyCell = document.createElement("td");
+                const valueCell = document.createElement("td");
+
+                keyCell.textContent = key;
+
+                if (typeof json[key] === "object" && !Array.isArray(json[key])) {
+                    const nestedContainer = document.createElement("div");
+                    renderJson(json[key], nestedContainer);
+                    valueCell.appendChild(nestedContainer);
+                } else if (Array.isArray(json[key])) {
+                    const nestedContainer = document.createElement("div");
+                    json[key].forEach((item, index) => {
+                        const itemContainer = document.createElement("div");
+                        const itemLabel = document.createElement("label");
+                        itemLabel.textContent = `Item ${index + 1}: `;
+                        itemContainer.appendChild(itemLabel);
+                        renderJson(item, itemContainer);
+                        nestedContainer.appendChild(itemContainer);
+                    });
+                    valueCell.appendChild(nestedContainer);
+                } else {
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    input.value = json[key];
+                    input.addEventListener("input", (e) => {
+                        json[key] = e.target.value;
+                    });
+                    valueCell.appendChild(input);
+                }
+
+                row.appendChild(keyCell);
+                row.appendChild(valueCell);
+                table.appendChild(row);
+            }
+
+            parentElement.appendChild(table);
+        }
+
+        // Load JSON from textarea
+        loadJsonBtn.addEventListener("click", () => {
+            try {
+                jsonData = JSON.parse(jsonInput.value);
+                renderJson(jsonData, editor);
+            } catch (e) {
+                alert("Invalid JSON");
+            }
+        });
+
+        // Export JSON to textarea
+        exportJsonBtn.addEventListener("click", () => {
+            jsonInput.value = JSON.stringify(jsonData, null, 4);
+            alert("Updated JSON exported!");
+        });
+    </script>
+</body>
+</html>
