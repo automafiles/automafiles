@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export JSON Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .entry-container {
+            border: 2px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #fff;
+            border-radius: 5px;
+        }
+        .entry {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .entry label {
+            font-weight: bold;
+        }
+        .entry input {
+            padding: 5px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            margin: 10px 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-export {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+    <script>
+        function addFields() {
+            let container = document.getElementById("form-container");
+            let div = document.createElement("div");
+            div.classList.add("entry-container");
+            div.innerHTML = `
+                <div class="entry"><label>Village Code:</label><input type="text" class="villageCode"></div>
+                <div class="entry"><label>Survey Number:</label><input type="text" class="surveyNumber"></div>
+                <div class="entry"><label>Sub Survey Number:</label><input type="text" class="subSurveyNumber"></div>
+                <div class="entry"><label>Farm ID:</label><input type="text" class="farmID"></div>
+                <div class="entry"><label>Ownership Type:</label><input type="text" class="ownershipType"></div>
+                <div class="entry"><label>Owner Number:</label><input type="text" class="ownerNumber"></div>
+                <div class="entry"><label>Main Owner Number:</label><input type="text" class="mainOwnerNumber"></div>
+                <div class="entry"><label>Owner Name (Eng):</label><input type="text" class="ownerNameEng"></div>
+                <div class="entry"><label>Owner Name (LL):</label><input type="text" class="ownerNameLL"></div>
+                <div class="entry"><label>Identifier Name (Eng):</label><input type="text" class="identifierNameEng"></div>
+                <div class="entry"><label>Identifier Name (LL):</label><input type="text" class="identifierNameLL"></div>
+                <div class="entry"><label>Area Unit:</label><input type="text" class="areaUnit"></div>
+                <div class="entry"><label>Ext Acre:</label><input type="text" class="extAcre"></div>
+                <div class="entry"><label>Land Type (Eng):</label><input type="text" class="landTypeEng"></div>
+                <div class="entry"><label>Khata Number:</label><input type="text" class="khataNumber"></div>
+                <div class="entry"><label>Total Area:</label><input type="number" class="totalArea"></div>
+            `;
+            container.appendChild(div);
+        }
+        
+        function exportJSON() {
+            let entries = document.querySelectorAll(".entry-container");
+            let data = [];
+            entries.forEach(entry => {
+                let obj = {
+                    villageCode: entry.querySelector(".villageCode").value,
+                    surveyNumber: entry.querySelector(".surveyNumber").value,
+                    subSurveyNumber: entry.querySelector(".subSurveyNumber").value,
+                    farmID: entry.querySelector(".farmID").value,
+                    ownershipType: entry.querySelector(".ownershipType").value,
+                    ownerNumber: entry.querySelector(".ownerNumber").value,
+                    mainOwnerNumber: entry.querySelector(".mainOwnerNumber").value,
+                    ownerNameEng: entry.querySelector(".ownerNameEng").value,
+                    ownerNameLL: entry.querySelector(".ownerNameLL").value,
+                    identifierNameEng: entry.querySelector(".identifierNameEng").value,
+                    identifierNameLL: entry.querySelector(".identifierNameLL").value,
+                    areaUnit: entry.querySelector(".areaUnit").value,
+                    extAcre: entry.querySelector(".extAcre").value,
+                    landTypeEng: entry.querySelector(".landTypeEng").value,
+                    khataNumber: entry.querySelector(".khataNumber").value,
+                    totalArea: entry.querySelector(".totalArea").value
+                };
+                data.push(obj);
+            });
+            let jsonData = {
+                status: "success",
+                code: 200,
+                message: "Get records.",
+                method: "POST",
+                data: data
+            };
+            
+            let exportButton = document.querySelector(".btn-export");
+            exportButton.setAttribute("data-json", JSON.stringify(jsonData, null, 2));
+            alert("JSON data assigned to button attribute!");
+        }
+        
+        window.onload = function() {
+            addFields();
+        };
+    </script>
+</head>
+<body>
+    <h2>Enter Village Details</h2>
+    <div id="form-container"></div>
+    <button class="btn-add" onclick="addFields()">Add More</button>
+    <button class="btn-export" onclick="exportJSON()">Export as JSON</button>
+</body>
+</html>
