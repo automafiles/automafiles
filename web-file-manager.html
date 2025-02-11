@@ -9,9 +9,9 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        button {
+        button, input {
             padding: 10px;
-            margin-bottom: 10px;
+            margin: 5px;
             cursor: pointer;
         }
         #file-list {
@@ -32,8 +32,9 @@
             color: blue;
             text-decoration: underline;
         }
-        .rename-input {
-            display: none;
+        #current-path {
+            font-weight: bold;
+            margin-top: 10px;
         }
         textarea {
             width: 100%;
@@ -50,6 +51,9 @@
 <body>
     <button id="select-folder">Select Folder</button>
     <button id="go-back">Go Back</button>
+    <input type="text" id="path-input" placeholder="Enter path..." />
+    <button id="go-to-path">Go</button>
+    <p id="current-path">Current Path: /</p>
     <ul id="file-list"></ul>
     <textarea id="editor"></textarea>
     <button id="save-file">Save File</button>
@@ -59,12 +63,13 @@
         let currentHandle = null;
         let selectedFile = null;
         let pathStack = [];
-        
+
         document.getElementById("select-folder").addEventListener("click", async () => {
             try {
                 currentHandle = await window.showDirectoryPicker({ mode: "readwrite" });
                 pathStack = [currentHandle];
                 listFiles(currentHandle);
+                updatePathDisplay();
             } catch (error) {
                 console.error("Folder selection failed:", error);
             }
@@ -74,12 +79,36 @@
             if (pathStack.length > 1) {
                 pathStack.pop();
                 listFiles(pathStack[pathStack.length - 1]);
+                updatePathDisplay();
+            }
+        });
+
+        document.getElementById("go-to-path").addEventListener("click", async () => {
+            const inputPath = document.getElementById("path-input").value.trim();
+            if (!inputPath) return;
+
+            try {
+                let newHandle = currentHandle;
+                const folders = inputPath.split("/");
+
+                for (let folder of folders) {
+                    if (folder) {
+                        newHandle = await newHandle.getDirectoryHandle(folder);
+                    }
+                }
+
+                pathStack = [newHandle];
+                listFiles(newHandle);
+                updatePathDisplay();
+            } catch (error) {
+                alert("Invalid Path or Access Denied");
             }
         });
 
         async function listFiles(directoryHandle) {
             const fileList = document.getElementById("file-list");
             fileList.innerHTML = "";
+
             for await (const entry of directoryHandle.values()) {
                 const listItem = document.createElement("li");
                 listItem.textContent = entry.kind === "file" ? "📄 " + entry.name : "📁 " + entry.name;
@@ -91,9 +120,10 @@
                     listItem.addEventListener("click", async () => {
                         pathStack.push(await directoryHandle.getDirectoryHandle(entry.name));
                         listFiles(pathStack[pathStack.length - 1]);
+                        updatePathDisplay();
                     });
                 }
-                
+
                 const renameBtn = document.createElement("span");
                 renameBtn.textContent = " Rename";
                 renameBtn.classList.add("rename-btn");
@@ -101,7 +131,7 @@
                     event.stopPropagation();
                     showRenameInput(entry, directoryHandle, listItem);
                 });
-                
+
                 const deleteBtn = document.createElement("span");
                 deleteBtn.textContent = " Delete";
                 deleteBtn.classList.add("delete-btn");
@@ -110,11 +140,17 @@
                     await directoryHandle.removeEntry(entry.name, { recursive: true });
                     listFiles(directoryHandle);
                 });
-                
+
                 listItem.appendChild(renameBtn);
                 listItem.appendChild(deleteBtn);
                 fileList.appendChild(listItem);
             }
+        }
+
+        function updatePathDisplay() {
+            const pathDisplay = pathStack.map(handle => handle.name).join("/") || "/";
+            document.getElementById("current-path").textContent = "Current Path: " + pathDisplay;
+            document.getElementById("path-input").value = pathDisplay;
         }
 
         function showRenameInput(entry, directoryHandle, listItem) {
