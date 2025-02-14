@@ -8,61 +8,104 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f4f4f9;
         }
         button, input {
             padding: 10px;
             margin: 5px;
             cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
         #file-list {
             list-style-type: none;
             padding: 0;
         }
         #file-list li {
-            padding: 5px;
-            border: 1px solid #ccc;
+            padding: 8px;
+            border: 1px solid #ddd;
             margin: 5px 0;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-        .rename-btn, .delete-btn {
-            margin-left: auto;
-            cursor: pointer;
-            color: blue;
-            text-decoration: underline;
-        }
-        #current-path {
-            font-weight: bold;
-            margin-top: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
         textarea {
             width: 100%;
-            height: 300px;
+            height: 200px;
             margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 14px;
         }
         #status {
             margin-top: 10px;
-            color: green;
             font-weight: bold;
+            padding: 8px;
+            display: none;
+            border-radius: 5px;
+        }
+        .success {
+            color: green;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            color: red;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        .rename-container {
+            display: none;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
+
     <button id="select-folder">Select Folder</button>
-    <button id="go-back">Go Back</button>
     <input type="text" id="path-input" placeholder="Enter path..." />
     <button id="go-to-path">Go</button>
+    <button id="rename-path">Rename</button>
+
     <p id="current-path">Current Path: /</p>
     <ul id="file-list"></ul>
+    
     <textarea id="editor"></textarea>
     <button id="save-file">Save File</button>
+
+    <div class="rename-container" id="rename-container">
+        <input type="text" id="rename-input" placeholder="Enter new name..." />
+        <button id="confirm-rename">Confirm</button>
+    </div>
+
     <p id="status"></p>
-    
+
     <script>
         let currentHandle = null;
-        let selectedFile = null;
         let pathStack = [];
+        let selectedFile = null;
+        let parentDirectory = null;
+
+        function showMessage(message, type = "success") {
+            const status = document.getElementById("status");
+            status.textContent = message;
+            status.className = type;
+            status.style.display = "block";
+            setTimeout(() => {
+                status.style.display = "none";
+            }, 3000);
+        }
 
         document.getElementById("select-folder").addEventListener("click", async () => {
             try {
@@ -71,15 +114,7 @@
                 listFiles(currentHandle);
                 updatePathDisplay();
             } catch (error) {
-                console.error("Folder selection failed:", error);
-            }
-        });
-
-        document.getElementById("go-back").addEventListener("click", () => {
-            if (pathStack.length > 1) {
-                pathStack.pop();
-                listFiles(pathStack[pathStack.length - 1]);
-                updatePathDisplay();
+                showMessage("Folder selection failed!", "error");
             }
         });
 
@@ -101,7 +136,7 @@
                 listFiles(newHandle);
                 updatePathDisplay();
             } catch (error) {
-                alert("Invalid Path or Access Denied");
+                showMessage("Invalid Path or Access Denied!", "error");
             }
         });
 
@@ -111,11 +146,15 @@
 
             for await (const entry of directoryHandle.values()) {
                 const listItem = document.createElement("li");
-                listItem.textContent = entry.kind === "file" ? "📄 " + entry.name : "📁 " + entry.name;
+                listItem.textContent = entry.name;
                 listItem.style.cursor = "pointer";
-                
+
                 if (entry.kind === "file") {
-                    listItem.addEventListener("click", () => openFile(entry));
+                    listItem.addEventListener("click", async () => {
+                        selectedFile = entry;
+                        parentDirectory = directoryHandle;
+                        await openFile(entry);
+                    });
                 } else {
                     listItem.addEventListener("click", async () => {
                         pathStack.push(await directoryHandle.getDirectoryHandle(entry.name));
@@ -124,25 +163,6 @@
                     });
                 }
 
-                const renameBtn = document.createElement("span");
-                renameBtn.textContent = " Rename";
-                renameBtn.classList.add("rename-btn");
-                renameBtn.addEventListener("click", async (event) => {
-                    event.stopPropagation();
-                    showRenameInput(entry, directoryHandle, listItem);
-                });
-
-                const deleteBtn = document.createElement("span");
-                deleteBtn.textContent = " Delete";
-                deleteBtn.classList.add("delete-btn");
-                deleteBtn.addEventListener("click", async (event) => {
-                    event.stopPropagation();
-                    await directoryHandle.removeEntry(entry.name, { recursive: true });
-                    listFiles(directoryHandle);
-                });
-
-                listItem.appendChild(renameBtn);
-                listItem.appendChild(deleteBtn);
                 fileList.appendChild(listItem);
             }
         }
@@ -153,58 +173,53 @@
             document.getElementById("path-input").value = pathDisplay;
         }
 
-        function showRenameInput(entry, directoryHandle, listItem) {
-            const renameInput = document.createElement("input");
-            renameInput.type = "text";
-            renameInput.value = entry.name;
-            renameInput.classList.add("rename-input");
-            listItem.appendChild(renameInput);
-            renameInput.style.display = "inline-block";
-            renameInput.focus();
-            
-            const submitButton = document.createElement("button");
-            submitButton.textContent = "✔";
-            submitButton.style.marginLeft = "5px";
-            submitButton.addEventListener("click", async () => {
-                const newName = renameInput.value.trim();
-                if (newName && newName !== entry.name) {
-                    let newHandle;
-                    if (entry.kind === "file") {
-                        newHandle = await directoryHandle.getFileHandle(newName, { create: true });
-                    } else {
-                        newHandle = await directoryHandle.getDirectoryHandle(newName, { create: true });
-                    }
-                    const writable = await newHandle.createWritable();
-                    await writable.write(await entry.getFile());
-                    await writable.close();
-                    await directoryHandle.removeEntry(entry.name, { recursive: true });
-                    listFiles(directoryHandle);
-                }
-            });
-            listItem.appendChild(submitButton);
-        }
-
         async function openFile(fileHandle) {
-            selectedFile = fileHandle;
             const file = await fileHandle.getFile();
             const content = await file.text();
             document.getElementById("editor").value = content;
         }
 
-        async function saveFile() {
-            if (!selectedFile) return;
+        document.getElementById("save-file").addEventListener("click", async () => {
+            if (!selectedFile || !parentDirectory) return;
             try {
                 const writable = await selectedFile.createWritable();
                 await writable.write(document.getElementById("editor").value);
                 await writable.close();
-                document.getElementById("status").textContent = "File saved successfully!";
+                showMessage("File saved successfully!");
             } catch (error) {
-                console.error("File save failed:", error);
-                document.getElementById("status").textContent = "File save failed!";
+                showMessage("File save failed!", "error");
             }
-        }
+        });
 
-        document.getElementById("save-file").addEventListener("click", saveFile);
+        document.getElementById("rename-path").addEventListener("click", () => {
+            if (!selectedFile) {
+                showMessage("Select a file or folder to rename!", "error");
+                return;
+            }
+            document.getElementById("rename-container").style.display = "block";
+        });
+
+        document.getElementById("confirm-rename").addEventListener("click", async () => {
+            const newName = document.getElementById("rename-input").value.trim();
+            if (!newName || !selectedFile || !parentDirectory) return;
+
+            try {
+                const newHandle = await parentDirectory.getFileHandle(newName, { create: true });
+                const writable = await newHandle.createWritable();
+                const oldFile = await selectedFile.getFile();
+                await writable.write(await oldFile.arrayBuffer());
+                await writable.close();
+
+                await parentDirectory.removeEntry(selectedFile.name);
+                showMessage("Renamed successfully!");
+
+                document.getElementById("rename-container").style.display = "none";
+                listFiles(parentDirectory);
+            } catch (error) {
+                showMessage("Rename failed!", "error");
+            }
+        });
+
     </script>
 </body>
 </html>
