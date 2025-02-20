@@ -56,7 +56,7 @@
             let div = document.createElement("div");
             div.classList.add("entry-container");
             div.innerHTML = `
-                <div class="entry"><label>Village Code:</label><input type="text" class="villageCode"></div>
+                <div class="entry"><label>Village Code:</label><input type="number" class="villageCode"></div>
                 <div class="entry"><label>Survey Number:</label><input type="text" class="surveyNumber"></div>
                 <div class="entry"><label>Sub Survey Number:</label><input type="text" class="subSurveyNumber"></div>
                 <div class="entry"><label>Farm ID:</label><input type="text" class="farmID"></div>
@@ -81,7 +81,7 @@
             let data = [];
             entries.forEach(entry => {
                 let obj = {
-                    villageCode: entry.querySelector(".villageCode").value,
+                    villageCode: parseInt(entry.querySelector(".villageCode").value, 10) || 0, 
                     surveyNumber: entry.querySelector(".surveyNumber").value,
                     subSurveyNumber: entry.querySelector(".subSurveyNumber").value,
                     farmID: entry.querySelector(".farmID").value,
@@ -96,7 +96,7 @@
                     extAcre: entry.querySelector(".extAcre").value,
                     landTypeEng: entry.querySelector(".landTypeEng").value,
                     khataNumber: entry.querySelector(".khataNumber").value,
-                    totalArea: entry.querySelector(".totalArea").value
+                    totalArea: parseFloat(entry.querySelector(".totalArea").value) || 0 
                 };
                 data.push(obj);
             });
