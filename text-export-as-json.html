@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export JSON</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .input-group {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .input-group input {
+            flex: 1;
+            padding: 8px;
+            margin-right: 5px;
+        }
+        button {
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enter Key-Value Pairs</h2>
+        <div id="inputs"></div>
+        <button onclick="addInput()">Add Key-Value</button>
+        <button onclick="exportJSON()">Export JSON</button>
+    </div>
+
+    <script>
+        function addInput() {
+            let div = document.createElement("div");
+            div.className = "input-group";
+            div.innerHTML = '<input type="text" placeholder="Key">' +
+                            '<input type="text" placeholder="Value">' +
+                            '<button onclick="this.parentElement.remove()">Remove</button>';
+            document.getElementById("inputs").appendChild(div);
+        }
+        
+        function exportJSON() {
+            let data = {};
+            document.querySelectorAll(".input-group").forEach(group => {
+                let key = group.children[0].value.trim();
+                let value = group.children[1].value.trim();
+                if (key) data[key] = value;
+            });
+            let blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "data.json";
+            a.click();
+        }
+    </script>
+</body>
+</html>
