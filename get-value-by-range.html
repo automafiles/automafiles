@@ -30,7 +30,7 @@
     <input type="number" id="indexInput" placeholder="Enter a number">
     <button onclick="filterJSON()">Get Result</button>
     <h2>Result</h2>
-    <pre id="output"></pre>
+    <pre id="output" data-result=""></pre>
 
     <script>
         function filterJSON() {
@@ -41,12 +41,18 @@
             try {
                 let parsedData = JSON.parse(jsonData);
                 if (Array.isArray(parsedData) && index >= 0 && index < parsedData.length) {
-                    output.textContent = JSON.stringify([parsedData[index]], null, 4);
+                    let result = JSON.stringify([parsedData[index]], null, 4);
+                    output.textContent = result;
+                    output.setAttribute("data-result", result);
                 } else {
-                    output.textContent = "Invalid input. Make sure your JSON is correct and index is within range.";
+                    let errorMsg = "Invalid input. Make sure your JSON is correct and index is within range.";
+                    output.textContent = errorMsg;
+                    output.setAttribute("data-result", errorMsg);
                 }
             } catch (error) {
-                output.textContent = "Error parsing JSON: " + error.message;
+                let errorText = "Error parsing JSON: " + error.message;
+                output.textContent = errorText;
+                output.setAttribute("data-result", errorText);
             }
         }
     </script>
