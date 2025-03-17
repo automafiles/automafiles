@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Data Filter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea, input, button {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+            padding: 10px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h2>Paste JSON Data</h2>
+    <textarea id="jsonInput" rows="8" placeholder="Paste your JSON here..."></textarea>
+    <h2>Enter Number</h2>
+    <input type="number" id="indexInput" placeholder="Enter a number">
+    <button onclick="filterJSON()">Get Result</button>
+    <h2>Result</h2>
+    <pre id="output"></pre>
+
+    <script>
+        function filterJSON() {
+            let jsonData = document.getElementById("jsonInput").value;
+            let index = parseInt(document.getElementById("indexInput").value);
+            let output = document.getElementById("output");
+            
+            try {
+                let parsedData = JSON.parse(jsonData);
+                if (Array.isArray(parsedData) && index >= 0 && index < parsedData.length) {
+                    output.textContent = JSON.stringify([parsedData[index]], null, 4);
+                } else {
+                    output.textContent = "Invalid input. Make sure your JSON is correct and index is within range.";
+                }
+            } catch (error) {
+                output.textContent = "Error parsing JSON: " + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
