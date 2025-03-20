@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Number to JSON</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        textarea {
+            width: 300px;
+            height: 100px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            display: inline-block;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h2>Mobile Number to JSON Converter</h2>
+    <textarea id="numbers" placeholder="Enter numbers separated by commas"></textarea>
+    <br>
+    <button onclick="convertToJSON()">Convert to JSON</button>
+    <h3>Output:</h3>
+    <pre id="output"></pre>
+
+    <script>
+        function convertToJSON() {
+            let input = document.getElementById('numbers').value;
+            let numbersArray = input.split(',').map(num => num.trim()).filter(num => num !== "");
+            document.getElementById('output').textContent = JSON.stringify(numbersArray, null, 2);
+        }
+    </script>
+</body>
+</html>
