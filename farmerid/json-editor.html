@@ -27,10 +27,11 @@
             padding: 10px;
             text-align: left;
         }
-        input[type="text"] {
+        textarea.input-field {
             width: 100%;
             box-sizing: border-box;
             padding: 5px;
+            height: 60px;
         }
         button {
             padding: 10px 15px;
@@ -59,9 +60,8 @@
 
         let jsonData = {};
 
-        // Function to render JSON as editable form
         function renderJson(json, parentElement) {
-            parentElement.innerHTML = ""; // Clear existing content
+            parentElement.innerHTML = "";
             const table = document.createElement("table");
 
             for (const key in json) {
@@ -87,24 +87,22 @@
                     });
                     valueCell.appendChild(nestedContainer);
                 } else {
-                    const input = document.createElement("input");
-                    input.type = "text";
-                    input.value = json[key];
-                    input.addEventListener("input", (e) => {
+                    const inputElement = document.createElement("textarea");
+                    inputElement.classList.add("input-field");
+                    inputElement.value = json[key];
+                    inputElement.addEventListener("input", (e) => {
                         json[key] = e.target.value;
                     });
-                    valueCell.appendChild(input);
+                    valueCell.appendChild(inputElement);
                 }
 
                 row.appendChild(keyCell);
                 row.appendChild(valueCell);
                 table.appendChild(row);
             }
-
             parentElement.appendChild(table);
         }
 
-        // Load JSON from textarea
         loadJsonBtn.addEventListener("click", () => {
             try {
                 jsonData = JSON.parse(jsonInput.value);
@@ -114,7 +112,6 @@
             }
         });
 
-        // Export JSON to textarea
         exportJsonBtn.addEventListener("click", () => {
             jsonInput.value = JSON.stringify(jsonData, null, 4);
             alert("Updated JSON exported!");
