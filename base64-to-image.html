@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Base64 Image Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      font-family: monospace;
+    }
+    img {
+      max-width: 100%;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Base64 Image Viewer</h2>
+  <p>Base64 image data (with or without `data:image/...;base64,` prefix):</p>
+  <textarea id="base64Input" placeholder="Paste your base64 image data here..."></textarea><br><br>
+  <button onclick="showImage()">Show Image</button>
+
+  <div id="imageContainer">
+    <h3>Output:</h3>
+    <img id="outputImage" alt="Image will appear here...">
+  </div>
+
+  <script>
+    function showImage() {
+      const input = document.getElementById("base64Input").value.trim();
+      const img = document.getElementById("outputImage");
+
+      if (input.startsWith("data:image")) {
+        img.src = input;
+      } else {
+        // default to PNG if prefix not provided
+        img.src = "data:image/png;base64," + input;
+      }
+    }
+  </script>
+</body>
+</html>
