@@ -57,10 +57,14 @@
       const dob = form.dob.value;
       const password = form.password.value;
 
+      // Convert DOB from yyyy-mm-dd to dd-mm-yyyy
+      const dobParts = dob.split("-");
+      const formattedDob = `${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`;
+
       output.innerHTML = `
         <h3>Submitted Details:</h3>
         <p><strong></strong> ${applicationNumber}</p>
-        <p><strong></strong> ${dob}</p>
+        <p><strong></strong> ${formattedDob}</p>
         <p><strong></strong> ${password}</p>
       `;
     });
