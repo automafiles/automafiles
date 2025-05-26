@@ -199,12 +199,13 @@
         editor.innerHTML = `
           <div class="form-section">
             <label>Notes for ${number}:</label><br />
-            <textarea id="numberNote" value="${numbers[number].notes}" value="${numbers[number].notes}">${numbers[number].notes}</textarea>
+            <textarea id="numberNote" value="${numbers[number].notes}">${numbers[number].notes}</textarea>
           </div>
           <button onclick="saveNumberNote()">Save Note</button>
         `;
       } else {
-        editor.innerHTML = 'Number not found';
+        editor.innerHTML = '';
+        console.error('Number not found');
       }
     }
 
