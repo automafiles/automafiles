@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Message Sender</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 300px;
+      background: #f0f0f0;
+      padding: 10px;
+      overflow-y: auto;
+      border-right: 1px solid #ccc;
+    }
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .message-item {
+      margin: 10px 0;
+      padding: 10px;
+      background: #ddd;
+      cursor: pointer;
+      position: relative;
+    }
+    .delete-button {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: red;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 2px 6px;
+    }
+    .form-section {
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 60px;
+    }
+    .top-controls {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="top-controls">
+      <button onclick="addNewMessage()">Add Message</button>
+      <button onclick="exportMessages()">Export</button>
+      <input type="file" onchange="importMessages(event)" />
+      <div style="margin-top: 10px">
+        <input type="number" id="searchIndex" placeholder="Message Number" style="width: 100%;" />
+        <button onclick="searchMessage()">Find</button>
+      </div>
+      <hr />
+      <textarea id="numberInput" placeholder="Enter numbers (comma separated)"></textarea>
+      <button onclick="importNumbers()">Add Numbers</button>
+      <input type="text" id="searchNumber" placeholder="Search number" style="width: 100%; margin-top: 10px;" />
+      <button onclick="searchNumber()">Find Number</button>
+    </div>
+    <div id="messageList"></div>
+  </div>
+  <div class="content">
+    <h2>View / Edit Message</h2>
+    <div id="messageEditor"></div>
+    <h2>Mobile Number Notes</h2>
+    <div id="numberEditor"></div>
+  </div>
+
+  <script>
+    let messages = JSON.parse(localStorage.getItem('messages') || '[]');
+    let numbers = JSON.parse(localStorage.getItem('numbers') || '{}');
+    let currentIndex = null;
+    let currentNumber = null;
+
+    function saveToLocalStorage() {
+      localStorage.setItem('messages', JSON.stringify(messages));
+      localStorage.setItem('numbers', JSON.stringify(numbers));
+    }
+
+    function addNewMessage() {
+      const newMessage = { text: '' };
+      messages.push(newMessage);
+      saveToLocalStorage();
+      updateMessageList();
+    }
+
+    function deleteMessage(index) {
+      if (confirm('Are you sure you want to delete this message?')) {
+        messages.splice(index, 1);
+        saveToLocalStorage();
+        updateMessageList();
+        document.getElementById('messageEditor').innerHTML = '';
+      }
+    }
+
+    function updateMessageList() {
+      const list = document.getElementById('messageList');
+      list.innerHTML = '';
+      messages.forEach((msg, index) => {
+        const div = document.createElement('div');
+        div.className = 'message-item';
+        div.innerHTML = `
+          Message ${index + 1}
+          <button class="delete-button" onclick="event.stopPropagation(); deleteMessage(${index})">X</button>
+        `;
+        div.onclick = () => editMessage(index);
+        list.appendChild(div);
+      });
+    }
+
+    function editMessage(index) {
+      currentIndex = index;
+      const editor = document.getElementById('messageEditor');
+      const msg = messages[index];
+      editor.innerHTML = `
+        <div class="form-section">
+          <label>Text Message:</label><br />
+          <textarea id="textMessage" value="${msg.text}">${msg.text}</textarea>
+        </div>
+        <button onclick="saveMessage()">Save</button>
+      `;
+    }
+
+    function saveMessage() {
+      const text = document.getElementById('textMessage').value;
+      messages[currentIndex] = { text };
+      saveToLocalStorage();
+      editMessage(currentIndex);
+    }
+
+    function searchMessage() {
+      const indexInput = document.getElementById('searchIndex');
+      const index = parseInt(indexInput.value, 10) - 1;
+      if (!isNaN(index) && index >= 0 && index < messages.length) {
+        editMessage(index);
+        indexInput.setAttribute('value', index + 1);
+      } else {
+        alert('Invalid message number');
+      }
+    }
+
+    function exportMessages() {
+      const data = {
+        messages,
+        numbers
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'messages_backup.json';
+      a.click();
+    }
+
+    function importMessages(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          messages = data.messages || [];
+          numbers = data.numbers || {};
+          saveToLocalStorage();
+          updateMessageList();
+          document.getElementById('messageEditor').innerHTML = '';
+          document.getElementById('numberEditor').innerHTML = '';
+        } catch (err) {
+          alert('Invalid file format');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function importNumbers() {
+      const input = document.getElementById('numberInput').value;
+      const nums = input.split(',').map(n => n.trim()).filter(n => n);
+      nums.forEach(num => {
+        if (!numbers[num]) numbers[num] = { notes: '' };
+      });
+      saveToLocalStorage();
+      alert('Numbers added successfully');
+    }
+
+    function searchNumber() {
+      const numberInput = document.getElementById('searchNumber');
+      const number = numberInput.value.trim();
+      const editor = document.getElementById('numberEditor');
+      if (number && numbers[number]) {
+        currentNumber = number;
+        numberInput.setAttribute('value', number);
+        editor.innerHTML = `
+          <div class="form-section">
+            <label>Notes for ${number}:</label><br />
+            <textarea id="numberNote" value="${numbers[number].notes}">${numbers[number].notes}</textarea>
+          </div>
+          <button onclick="saveNumberNote()">Save Note</button>
+        `;
+      } else {
+        editor.innerHTML = 'Number not found';
+      }
+    }
+
+    function saveNumberNote() {
+      const note = document.getElementById('numberNote').value;
+      if (currentNumber) {
+        numbers[currentNumber].notes = note;
+        saveToLocalStorage();
+        alert('Note saved for ' + currentNumber);
+      }
+    }
+
+    updateMessageList();
+  </script>
+</body>
+</html>
