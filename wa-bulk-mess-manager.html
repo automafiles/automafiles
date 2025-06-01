@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Message Helper</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    input, button, textarea { margin: 5px; }
+    .section { margin-bottom: 20px; }
+    .label { font-weight: bold; }
+    #goToWhatsAppBtnTop { font-size: 18px; padding: 10px 20px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h1>WhatsApp Message Sender Helper</h1>
+  <button id="goToWhatsAppBtnTop" onclick="goToWhatsApp()" disabled>Go to WhatsApp</button>
+
+  <div class="section">
+    <div class="label">Add Message:</div>
+    <textarea id="messageInput" placeholder="Enter message" rows="4" cols="50"></textarea><br>
+    <button onclick="addMessage()">Add Message</button>
+    <div id="messageCount">0 messages added</div>
+    <input type="text" id="searchMessage" placeholder="Search message" oninput="searchMessage()" />
+    <div id="messageResults"></div>
+  </div>
+
+  <div class="section">
+    <div class="label">Import Numbers (comma separated):</div>
+    <input type="text" id="numberInput" placeholder="e.g. 1234567890,9876543210" />
+    <button onclick="importNumbers()">Import Numbers</button>
+    <div id="numberCount">0 numbers added</div>
+    <input type="text" id="searchNumber" placeholder="Search number" oninput="searchNumber()" />
+    <div id="numberResults"></div>
+  </div>
+
+  <div class="section">
+    <div class="label">Set Delay Range (seconds):</div>
+    <input type="number" id="minDelay" placeholder="Min delay (sec)" />
+    <input type="number" id="maxDelay" placeholder="Max delay (sec)" />
+  </div>
+
+  <div class="section">
+    <button onclick="selectMessage()">Select Message</button>
+    <div id="selectionResult"></div>
+  </div>
+
+  <script>
+    let messages = JSON.parse(localStorage.getItem('messages') || '[]');
+    let numbers = JSON.parse(localStorage.getItem('numbers') || '[]');
+    let sentMap = JSON.parse(localStorage.getItem('sentMap') || '{}');
+    let selectedNumber = '';
+    let selectedMessage = '';
+
+    const updateCounts = () => {
+      document.getElementById('messageCount').innerText = `${messages.length} messages added`;
+      document.getElementById('numberCount').innerText = `${numbers.length} numbers added`;
+    };
+
+    const saveData = () => {
+      localStorage.setItem('messages', JSON.stringify(messages));
+      localStorage.setItem('numbers', JSON.stringify(numbers));
+      localStorage.setItem('sentMap', JSON.stringify(sentMap));
+    };
+
+    const addMessage = () => {
+      const msg = document.getElementById('messageInput').value.trim();
+      if (msg) {
+        messages.push(msg);
+        saveData();
+        updateCounts();
+        document.getElementById('messageInput').value = '';
+      }
+    };
+
+    const importNumbers = () => {
+      const input = document.getElementById('numberInput').value.trim();
+      const newNumbers = input.split(',').map(n => n.trim()).filter(n => n);
+      numbers.push(...newNumbers);
+      saveData();
+      updateCounts();
+      document.getElementById('numberInput').value = '';
+    };
+
+    const searchMessage = () => {
+      const query = document.getElementById('searchMessage').value.trim().toLowerCase();
+      const results = messages.filter(m => m.toLowerCase().includes(query));
+      document.getElementById('messageResults').innerText = results.join('\n');
+    };
+
+    const searchNumber = () => {
+      const query = document.getElementById('searchNumber').value.trim();
+      const results = numbers.filter(n => n.includes(query));
+      document.getElementById('numberResults').innerText = results.join('\n');
+    };
+
+    const selectMessage = () => {
+      if (numbers.length === 0 || messages.length === 0) {
+        alert('Add both messages and numbers first.');
+        return;
+      }
+      const unsent = numbers.map(n => {
+        const sent = sentMap[n] || [];
+        const availableMsgs = messages.filter(m => !sent.includes(m));
+        return { number: n, availableMsgs };
+      }).filter(e => e.availableMsgs.length > 0);
+
+      if (unsent.length === 0) {
+        document.getElementById('selectionResult').innerText = 'No more new messages to send.';
+        document.getElementById('goToWhatsAppBtnTop').disabled = true;
+        return;
+      }
+
+      const randIndex = Math.floor(Math.random() * unsent.length);
+      const chosen = unsent[randIndex];
+      const message = chosen.availableMsgs[Math.floor(Math.random() * chosen.availableMsgs.length)];
+
+      sentMap[chosen.number] = (sentMap[chosen.number] || []).concat(message);
+      saveData();
+
+      const minDelay = parseInt(document.getElementById('minDelay').value) || 0;
+      const maxDelay = parseInt(document.getElementById('maxDelay').value) || 0;
+      const delay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+
+      selectedNumber = chosen.number;
+      selectedMessage = message;
+
+      document.getElementById('selectionResult').innerText = `Sending to ${selectedNumber} with message: "${selectedMessage}" after ${delay} seconds.`;
+      const btnTop = document.getElementById('goToWhatsAppBtnTop');
+      btnTop.disabled = true;
+
+      setTimeout(() => {
+        btnTop.disabled = false;
+      }, delay * 1000);
+    };
+
+    const goToWhatsApp = () => {
+      if (selectedNumber && selectedMessage) {
+        const url = `https://wa.me/${selectedNumber}?text=${encodeURIComponent(selectedMessage)}`;
+        window.open(url, '_blank');
+      }
+    };
+
+    updateCounts();
+  </script>
+</body>
+</html>
