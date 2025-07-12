@@ -2,14 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WhatsApp Message Helper</title>
   <style>
-    body { font-family: Arial; margin: 20px; }
-    input, button, textarea { margin: 5px; }
-    .section { margin-bottom: 20px; }
-    .label { font-weight: bold; }
-    #goToWhatsAppBtnTop { font-size: 18px; padding: 10px 20px; margin-bottom: 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    input, button, textarea {
+      margin: 5px;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .label {
+      font-weight: bold;
+    }
+    #goToWhatsAppBtnTop {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
@@ -63,6 +76,13 @@
       localStorage.setItem('sentMap', JSON.stringify(sentMap));
     };
 
+    const saveDelayValues = () => {
+      const minDelay = document.getElementById('minDelay').value;
+      const maxDelay = document.getElementById('maxDelay').value;
+      localStorage.setItem('minDelay', minDelay);
+      localStorage.setItem('maxDelay', maxDelay);
+    };
+
     const addMessage = () => {
       const msg = document.getElementById('messageInput').value.trim();
       if (msg) {
@@ -85,13 +105,13 @@
     const searchMessage = () => {
       const query = document.getElementById('searchMessage').value.trim().toLowerCase();
       const results = messages.filter(m => m.toLowerCase().includes(query));
-      document.getElementById('messageResults').innerText = results.join('\n');
+      document.getElementById('messageResults').innerHTML = results.map(m => `<div>${m}</div>`).join('');
     };
 
     const searchNumber = () => {
       const query = document.getElementById('searchNumber').value.trim();
       const results = numbers.filter(n => n.includes(query));
-      document.getElementById('numberResults').innerText = results.join('\n');
+      document.getElementById('numberResults').innerHTML = results.map(n => `<div>${n}</div>`).join('');
     };
 
     const selectMessage = () => {
@@ -125,12 +145,15 @@
       selectedNumber = chosen.number;
       selectedMessage = message;
 
-      document.getElementById('selectionResult').innerText = `Sending to ${selectedNumber} with message: "${selectedMessage}" after ${delay} seconds.`;
+      document.getElementById('selectionResult').innerText =
+        `Sending to ${selectedNumber} with message: "${selectedMessage}" after ${delay} seconds.`;
+      
       const btnTop = document.getElementById('goToWhatsAppBtnTop');
       btnTop.disabled = true;
 
       setTimeout(() => {
         btnTop.disabled = false;
+        btnTop.scrollIntoView({ behavior: "smooth" });
       }, delay * 1000);
     };
 
@@ -140,6 +163,14 @@
         window.open(url, '_blank');
       }
     };
+
+    // Delay input change listener to save to localStorage
+    document.getElementById('minDelay').addEventListener('input', saveDelayValues);
+    document.getElementById('maxDelay').addEventListener('input', saveDelayValues);
+
+    // On page load, restore saved delay values
+    document.getElementById('minDelay').value = localStorage.getItem('minDelay') || '';
+    document.getElementById('maxDelay').value = localStorage.getItem('maxDelay') || '';
 
     updateCounts();
   </script>
