@@ -155,8 +155,17 @@
         btnTop.disabled = false;
         btnTop.scrollIntoView({ behavior: "smooth" });
 
-        // ✅ Open Play Store App using deep link (for Android)
+        // 🔁 Try to open Play Store app
         window.location.href = "intent://details?id=com.whatsapp#Intent;scheme=market;package=com.android.vending;end";
+
+        // 🔁 If still on page after 3 seconds, open fallback URL
+        setTimeout(() => {
+          if (document.visibilityState === 'visible') {
+            // Fallback to browser Play Store URL
+            window.open("https://play.google.com/store/apps/details?id=com.whatsapp", "_blank");
+          }
+        }, 3000);
+
       }, delay * 1000);
     };
 
@@ -167,11 +176,11 @@
       }
     };
 
-    // Save delay values on change
+    // Save delay on change
     document.getElementById('minDelay').addEventListener('input', saveDelayValues);
     document.getElementById('maxDelay').addEventListener('input', saveDelayValues);
 
-    // Restore delay values on load
+    // Restore delay on page load
     document.getElementById('minDelay').value = localStorage.getItem('minDelay') || '';
     document.getElementById('maxDelay').value = localStorage.getItem('maxDelay') || '';
 
