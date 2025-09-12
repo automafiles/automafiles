@@ -18,16 +18,17 @@
     .label {
       font-weight: bold;
     }
-    #goToWhatsAppBtnTop {
-      font-size: 18px;
-      padding: 10px 20px;
-      margin-bottom: 20px;
+    #goToWhatsAppBtnTop, #openWhatsAppAppBtn {
+      font-size: 16px;
+      padding: 10px 15px;
+      margin: 5px;
     }
   </style>
 </head>
 <body>
   <h1>WhatsApp Message Sender Helper</h1>
   <button id="goToWhatsAppBtnTop" onclick="goToWhatsApp()" disabled>Go to WhatsApp</button>
+  <button id="openWhatsAppAppBtn" onclick="openWhatsAppApp()" disabled>Open WhatsApp App</button>
 
   <div class="section">
     <div class="label">Add Message:</div>
@@ -105,13 +106,17 @@
     const searchMessage = () => {
       const query = document.getElementById('searchMessage').value.trim().toLowerCase();
       const results = messages.filter(m => m.toLowerCase().includes(query));
-      document.getElementById('messageResults').innerHTML = results.map(m => `<div>${m}</div>`).join('');
+      document.getElementById('messageResults').innerHTML = results.length
+        ? results.map(m => `<div>${m}</div>`).join('')
+        : '<div>No results</div>';
     };
 
     const searchNumber = () => {
       const query = document.getElementById('searchNumber').value.trim();
       const results = numbers.filter(n => n.includes(query));
-      document.getElementById('numberResults').innerHTML = results.map(n => `<div>${n}</div>`).join('');
+      document.getElementById('numberResults').innerHTML = results.length
+        ? results.map(n => `<div>${n}</div>`).join('')
+        : '<div>No results</div>';
     };
 
     const selectMessage = () => {
@@ -119,6 +124,7 @@
         alert('Add both messages and numbers first.');
         return;
       }
+
       const unsent = numbers.map(n => {
         const sent = sentMap[n] || [];
         const availableMsgs = messages.filter(m => !sent.includes(m));
@@ -128,6 +134,7 @@
       if (unsent.length === 0) {
         document.getElementById('selectionResult').innerText = 'No more new messages to send.';
         document.getElementById('goToWhatsAppBtnTop').disabled = true;
+        document.getElementById('openWhatsAppAppBtn').disabled = true;
         return;
       }
 
@@ -149,23 +156,14 @@
         `Sending to ${selectedNumber} with message: "${selectedMessage}" after ${delay} seconds.`;
 
       const btnTop = document.getElementById('goToWhatsAppBtnTop');
+      const btnApp = document.getElementById('openWhatsAppAppBtn');
       btnTop.disabled = true;
+      btnApp.disabled = true;
 
       setTimeout(() => {
         btnTop.disabled = false;
+        btnApp.disabled = false;
         btnTop.scrollIntoView({ behavior: "smooth" });
-
-        // 🔁 Try to open Play Store app
-       // window.location.href = "intent://details?id=com.whatsapp#Intent;scheme=market;package=com.android.vending;end";
-
-        // 🔁 If still on page after 3 seconds, open fallback URL
-       // setTimeout(() => {
-         // if (document.visibilityState === 'visible') {
-            // Fallback to browser Play Store URL
-          //  window.open("https://play.google.com/store/apps/details?id=com.whatsapp", "_blank");
-          }
-        }, 3000);
-
       }, delay * 1000);
     };
 
@@ -173,6 +171,14 @@
       if (selectedNumber && selectedMessage) {
         const url = `https://wa.me/${selectedNumber}?text=${encodeURIComponent(selectedMessage)}`;
         window.open(url, '_blank');
+      }
+    };
+
+    const openWhatsAppApp = () => {
+      if (selectedNumber && selectedMessage) {
+        const encodedMsg = encodeURIComponent(selectedMessage);
+        const appUrl = `whatsapp://send?phone=${selectedNumber}&text=${encodedMsg}`;
+        window.location.href = appUrl;
       }
     };
 
