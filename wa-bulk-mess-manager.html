@@ -157,12 +157,18 @@
 
       const btnTop = document.getElementById('goToWhatsAppBtnTop');
       const btnApp = document.getElementById('openWhatsAppAppBtn');
+
+      // Disable + show "Waiting..."
       btnTop.disabled = true;
       btnApp.disabled = true;
+      btnTop.innerText = "Waiting...";
+      btnApp.innerText = "Waiting...";
 
       setTimeout(() => {
         btnTop.disabled = false;
         btnApp.disabled = false;
+        btnTop.innerText = "Go to WhatsApp";
+        btnApp.innerText = "Open WhatsApp App";
         btnTop.scrollIntoView({ behavior: "smooth" });
       }, delay * 1000);
     };
@@ -193,4 +199,5 @@
     updateCounts();
   </script>
 </body>
-</html>
+  </html>
+    
