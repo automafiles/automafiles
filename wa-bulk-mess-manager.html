@@ -156,13 +156,13 @@
         btnTop.scrollIntoView({ behavior: "smooth" });
 
         // 🔁 Try to open Play Store app
-        window.location.href = "intent://details?id=com.whatsapp#Intent;scheme=market;package=com.android.vending;end";
+       // window.location.href = "intent://details?id=com.whatsapp#Intent;scheme=market;package=com.android.vending;end";
 
         // 🔁 If still on page after 3 seconds, open fallback URL
-        setTimeout(() => {
-          if (document.visibilityState === 'visible') {
+       // setTimeout(() => {
+         // if (document.visibilityState === 'visible') {
             // Fallback to browser Play Store URL
-            window.open("https://play.google.com/store/apps/details?id=com.whatsapp", "_blank");
+          //  window.open("https://play.google.com/store/apps/details?id=com.whatsapp", "_blank");
           }
         }, 3000);
 
