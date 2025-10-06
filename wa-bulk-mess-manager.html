@@ -23,13 +23,33 @@
       padding: 10px 15px;
       margin: 5px;
     }
+    #selectMessageTopBtn {
+      font-size: 20px;
+      padding: 12px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    #selectMessageTopBtn:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
   <h1>WhatsApp Message Sender Helper</h1>
+
+  <!-- Select Message Button (Moved to Top) -->
+  <button id="selectMessageTopBtn" onclick="selectMessage()">Select Message</button>
+  <div id="selectionResult"></div>
+
+  <!-- Buttons to go to WhatsApp -->
   <button id="goToWhatsAppBtnTop" onclick="goToWhatsApp()" disabled>Go to WhatsApp</button>
   <button id="openWhatsAppAppBtn" onclick="openWhatsAppApp()" disabled>Open WhatsApp App</button>
 
+  <!-- Messages Section -->
   <div class="section">
     <div class="label">Add Message:</div>
     <textarea id="messageInput" placeholder="Enter message" rows="4" cols="50"></textarea><br>
@@ -39,6 +59,7 @@
     <div id="messageResults"></div>
   </div>
 
+  <!-- Numbers Section -->
   <div class="section">
     <div class="label">Import Numbers (comma separated):</div>
     <input type="text" id="numberInput" placeholder="e.g. 1234567890,9876543210" />
@@ -48,15 +69,11 @@
     <div id="numberResults"></div>
   </div>
 
+  <!-- Delay Section -->
   <div class="section">
     <div class="label">Set Delay Range (seconds):</div>
     <input type="number" id="minDelay" placeholder="Min delay (sec)" />
     <input type="number" id="maxDelay" placeholder="Max delay (sec)" />
-  </div>
-
-  <div class="section">
-    <button onclick="selectMessage()">Select Message</button>
-    <div id="selectionResult"></div>
   </div>
 
   <script>
@@ -199,5 +216,4 @@
     updateCounts();
   </script>
 </body>
-  </html>
-    
+</html>
